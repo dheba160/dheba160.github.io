@@ -1,11 +1,114 @@
-/* Keep all the previous styles from body to the footer... */
-
-/* --------- Animations --------- */
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 1.5s 0.2s forwards; /* Added a slight delay */
+/* --------- General Styles --------- */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
 }
 
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+/* --------- Header & Navigation --------- */
+.main-header {
+    background: #fff;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: auto;
+    padding: 0 2rem;
+}
+
+.main-nav .logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.main-nav ul li {
+    margin-left: 20px;
+}
+
+.main-nav ul li a {
+    color: #333;
+    font-weight: 600;
+    padding-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.main-nav ul li a.active,
+.main-nav ul li a:hover {
+    color: #0056b3;
+    border-bottom: 2px solid #007bff;
+}
+
+/* --------- Hero Section --------- */
+.hero {
+    background: #2F4F4F;
+    color: #fff;
+    height: 80vh; /* This is a critical style that is currently missing */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-content {
+    animation: fadeIn 1.5s 0.2s forwards;
+    opacity: 0;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+.btn {
+    display: inline-block;
+    background: #007bff;
+    color: #fff;
+    padding: 1rem 2rem;
+    margin-top: 2rem;
+    border-radius: 5px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
+
+/* --------- Footer --------- */
+.main-footer {
+    text-align: center;
+    padding: 2rem;
+    background: #333;
+    color: #fff;
+}
+
+/* --------- Animations --------- */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -17,22 +120,22 @@
     }
 }
 
-/* --------- New Earnings Widget Styles --------- */
+/* --------- Earnings Widget Styles --------- */
 #earnings-widget {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
-    backdrop-filter: blur(15px); /* The "glass" effect */
-    -webkit-backdrop-filter: blur(15px); /* For Safari compatibility */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     z-index: 1001;
     color: #fff;
     font-size: 14px;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* Ensures content respects the border-radius */
-    animation: fadeIn 1s 0.5s forwards; /* The widget also fades in */
+    overflow: hidden;
+    animation: fadeIn 1s 0.5s forwards;
     opacity: 0;
 }
 
@@ -79,9 +182,20 @@
     text-align: right;
 }
 
-
-/* --------- Responsive Design for the Widget --------- */
+/* --------- Responsive Design --------- */
 @media(max-width: 768px) {
+    .main-nav {
+        flex-direction: column;
+    }
+
+    .main-nav ul {
+        margin-top: 1rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
     #earnings-widget {
         left: 10px;
         right: 10px;
@@ -91,64 +205,4 @@
     #earnings-display {
         font-size: 24px;
     }
-}```
-
----
-
-### **3. `script.js` (The New Animation Engine)**
-
-This script is completely rewritten to be smoother and maintain continuity.
-
-```javascript
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- Data and DOM Elements ---
-    const earningsPerSecond = {
-        bezos: 985,
-        musk: 631,
-        trump: 12,
-        page: 951,
-        arnault: 196,
-        zuckerberg: 469,
-        gates: 117
-    };
-    const personSelect = document.getElementById('person-select');
-    const earningsDisplay = document.getElementById('earnings-display');
-
-    // --- State and Timing Variables ---
-    let selectedPerson = 'bezos';
-    const startTime = Date.now(); // Record the exact time the page was loaded. This is the key to continuity.
-    let animationFrameId;
-
-    /**
-     * The main animation loop.
-     * This function runs on every frame the browser can render, making the animation super smooth.
-     */
-    function animateEarnings() {
-        // 1. Calculate total elapsed time since the page loaded.
-        const elapsedTimeInMs = Date.now() - startTime;
-        
-        // 2. Get the earnings rate for the currently selected person.
-        const ratePerSecond = earningsPerSecond[selectedPerson];
-        
-        // 3. Calculate the total earnings for the entire elapsed time.
-        const currentEarnings = (elapsedTimeInMs / 1000) * ratePerSecond;
-        
-        // 4. Update the display with a formatted currency string.
-        earningsDisplay.textContent = `$${currentEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        
-        // 5. Request the next animation frame to continue the loop.
-        animationFrameId = requestAnimationFrame(animateEarnings);
-    }
-
-    // --- Event Listener ---
-    // When the user selects a new person, just update the variable.
-    // The animation loop will automatically pick up the new rate on the next frame.
-    personSelect.addEventListener('change', (e) => {
-        selectedPerson = e.target.value;
-    });
-
-    // --- Initial Call ---
-    // Start the animation loop.
-    animateEarnings();
-});
+}
