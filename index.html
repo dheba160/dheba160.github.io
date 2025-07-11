@@ -57,7 +57,6 @@
             -webkit-text-fill-color: transparent;
         }
         
-        /* Button Interaction Styling */
         .button-container {
             min-height: 100px;
             display: flex;
@@ -75,16 +74,9 @@
             z-index: 1;
         }
         
+        /* This single class now reveals all buttons at the same time */
         .buttons-activated .aurora-button {
             clip-path: circle(75% at 50% 50%);
-        }
-        
-        /* Staggered reveal animation */
-        .buttons-activated .aurora-button:nth-child(2) {
-            transition-delay: 0.1s;
-        }
-        .buttons-activated .aurora-button:nth-child(3) {
-            transition-delay: 0.2s;
         }
 
         .aurora-button .content {
@@ -160,10 +152,9 @@
     <div id="earnings-text" class="aurora-gradient"></div>
 
 
-    <!-- ALL JAVASCRIPT IS INLINED HERE -->
+    <!-- The JavaScript is unchanged -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Earnings Calculator Logic (unchanged) ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 }, musk: { name: 'Elon Musk', rate: 631 },
                 trump: { name: 'Donald Trump', rate: 12 }, page: { name: 'Larry Page', rate: 951 },
@@ -183,12 +174,9 @@
             }
             updateEarnings();
 
-
-            // --- RE-ARCHITECTED: One-Time Reveal on First Mouse Movement ---
             const buttonContainer = document.querySelector('.button-container');
             let buttonsHaveBeenRevealed = false;
 
-            // This function attaches the gradient background to each button's border
             document.querySelectorAll('.aurora-button').forEach(button => {
                 const computedStyle = window.getComputedStyle(document.body.querySelector('.aurora-gradient'));
                 const gradient = computedStyle.getPropertyValue('background-image');
@@ -198,21 +186,12 @@
             });
 
             function revealButtonsOnFirstMove() {
-                // If this function has already run, do nothing.
-                if (buttonsHaveBeenRevealed) {
-                    return;
-                }
-                // Set the flag to true so this logic never runs again.
+                if (buttonsHaveBeenRevealed) { return; }
                 buttonsHaveBeenRevealed = true;
-                
-                // Add the class that triggers the CSS animations.
                 buttonContainer.classList.add('buttons-activated');
-                
-                // For maximum performance, remove the event listener after it has fired once.
                 document.body.removeEventListener('mousemove', revealButtonsOnFirstMove);
             }
             
-            // Listen for the very first mouse movement anywhere on the page body.
             document.body.addEventListener('mousemove', revealButtonsOnFirstMove);
         });
     </script>
