@@ -57,6 +57,7 @@
             -webkit-text-fill-color: transparent;
         }
         
+        /* Button styles refined for performance */
         .button-container {
             min-height: 100px;
             display: flex;
@@ -66,19 +67,14 @@
         }
 
         .aurora-button {
+            /* No transition here; JS will handle the reveal smoothly */
             clip-path: circle(0% at 50% 50%);
-            transition: clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
             display: inline-block;
             text-decoration: none;
             z-index: 1;
         }
         
-        /* This single class now reveals all buttons at the same time */
-        .buttons-activated .aurora-button {
-            clip-path: circle(75% at 50% 50%);
-        }
-
         .aurora-button .content {
             display: block;
             padding: 0.75rem 1.75rem;
@@ -152,9 +148,10 @@
     <div id="earnings-text" class="aurora-gradient"></div>
 
 
-    <!-- The JavaScript is unchanged -->
+    <!-- ALL JAVASCRIPT IS INLINED HERE -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Earnings Calculator Logic (unchanged) ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 }, musk: { name: 'Elon Musk', rate: 631 },
                 trump: { name: 'Donald Trump', rate: 12 }, page: { name: 'Larry Page', rate: 951 },
@@ -174,25 +171,64 @@
             }
             updateEarnings();
 
-            const buttonContainer = document.querySelector('.button-container');
-            let buttonsHaveBeenRevealed = false;
+            // --- RE-ARCHITECTED: High-Performance Continuous Proximity Logic ---
+            const buttons = Array.from(document.querySelectorAll('.aurora-button'));
+            const maxDistance = 200; // The max distance in pixels to react
+            
+            // Mouse coordinates, stored globally for performance.
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            
+            // Pre-calculate button geometries to avoid doing it in the animation loop
+            let buttonGeometries = [];
+            function calculateButtonGeometries() {
+                buttonGeometries = buttons.map(button => {
+                    const rect = button.getBoundingClientRect();
+                    return {
+                        element: button,
+                        x: rect.left + rect.width / 2,
+                        y: rect.top + rect.height / 2
+                    };
+                });
+            }
+            calculateButtonGeometries();
 
-            document.querySelectorAll('.aurora-button').forEach(button => {
+            // This function attaches the gradient background to each button's border
+            buttons.forEach(button => {
                 const computedStyle = window.getComputedStyle(document.body.querySelector('.aurora-gradient'));
                 const gradient = computedStyle.getPropertyValue('background-image');
                 const borderElement = document.createElement('style');
                 borderElement.innerHTML = `#${button.id}::before { background: ${gradient}; background-size: 300% 300%; animation: aurora-text-flow 8s ease infinite; }`;
                 document.head.appendChild(borderElement);
             });
-
-            function revealButtonsOnFirstMove() {
-                if (buttonsHaveBeenRevealed) { return; }
-                buttonsHaveBeenRevealed = true;
-                buttonContainer.classList.add('buttons-activated');
-                document.body.removeEventListener('mousemove', revealButtonsOnFirstMove);
-            }
             
-            document.body.addEventListener('mousemove', revealButtonsOnFirstMove);
+            // The animation loop. It runs independently of mouse movement.
+            function proximityAnimationLoop() {
+                // For each button, calculate its proximity and update its style.
+                buttonGeometries.forEach(geo => {
+                    const distance = Math.sqrt(Math.pow(mouseX - geo.x, 2) + Math.pow(mouseY - geo.y, 2));
+                    const proximity = Math.max(0, 1 - distance / maxDistance);
+                    const clipRadius = proximity * 75; // 75% gives a nice full circle
+                    geo.element.style.clipPath = `circle(${clipRadius}% at 50% 50%)`;
+                });
+                
+                // Keep the loop running
+                requestAnimationFrame(proximityAnimationLoop);
+            }
+
+            // --- Event Listeners ---
+            
+            // This listener's ONLY job is to update the mouse coordinates. Very fast.
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            
+            // If the window is resized, we need to recalculate where the buttons are.
+            window.addEventListener('resize', calculateButtonGeometries);
+            
+            // Start the animation loop.
+            proximityAnimationLoop();
         });
     </script>
 </body>
