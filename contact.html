@@ -4,17 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Dennis Heba</title>
+
+    <!-- These links to the font and stylesheet are the same as on the index page for consistency. -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+
     <header class="main-header">
         <nav class="main-nav">
             <div class="logo">Dennis Heba</div>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="contact.html" class="active">Contact</a></li>
-                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="./index.html">Home</a></li>
+                <!-- The 'active' class is now on the Contact link. -->
+                <li><a href="./contact.html" class="active">Contact</a></li>
+                <li><a href="./privacy.html">Privacy Policy</a></li>
             </ul>
         </nav>
     </header>
@@ -24,22 +28,34 @@
             <div class="contact-container">
                 <h2>Contact Me</h2>
                 <p>I'm here to help. Fill out the form below to get in touch.</p>
+
+                <!-- This section displays direct contact information. -->
                 <div class="contact-info">
                     <p><strong>Email:</strong> <a href="mailto:your-email@example.com">your-email@example.com</a></p>
                 </div>
+
+                <!-- The <form> element is used to create an HTML form for user input. -->
                 <form class="contact-form">
+                    <!-- Each 'form-group' div wraps a label and an input field for styling. -->
                     <div class="form-group">
+                        <!-- The <label> defines a label for an <input> element. -->
                         <label for="name">Name</label>
+                        <!-- The <input> element specifies an input field where the user can enter data. -->
                         <input type="text" id="name" name="name" required>
                     </div>
+
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" required>
                     </div>
+
                     <div class="form-group">
                         <label for="message">Message</label>
+                        <!-- A <textarea> is used for multi-line input. -->
                         <textarea id="message" name="message" rows="5" required></textarea>
                     </div>
+
+                    <!-- The <button> element with type="submit" submits the form data. -->
                     <button type="submit" class="btn">Send Message</button>
                 </form>
             </div>
@@ -49,5 +65,64 @@
     <footer class="main-footer">
         <p>© 2025 Dennis Heba.</p>
     </footer>
+
+</body>
+</html>```
+
+---
+
+### **3. `privacy.html` (Privacy Policy)**
+A styled placeholder page for your legal information.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <nav class="main-nav">
+            <div class="logo">Dennis Heba</div>
+            <ul>
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+                <!-- The 'active' class is now on the Privacy Policy link. -->
+                <li><a href="./privacy.html" class="active">Privacy Policy</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- This section is designed for text-heavy content like a privacy policy. -->
+        <section class="privacy-section">
+            <div class="privacy-container">
+                <h2>Privacy Policy</h2>
+                <p>Last updated: July 12, 2025</p>
+
+                <!-- 'h3' tags are used for subheadings within the page. -->
+                <h3>1. Introduction</h3>
+                <p>This is a placeholder for your privacy policy. You can add your content here.</p>
+
+                <h3>2. Information We Collect</h3>
+                <p>Details about the data you collect will go here.</p>
+
+                <h3>3. How We Use Your Information</h3>
+                <p>Details on how you use the collected data will be placed here.</p>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>© 2025 Dennis Heba.</p>
+    </footer>
+
 </body>
 </html>
