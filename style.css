@@ -1,166 +1,36 @@
-/* --------- General Styles --------- */
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    background-color: #f4f4f4;
-    color: #333;
-    line-height: 1.6;
-}
-
-a {
-    text-decoration: none;
-    color: #007bff;
-}
-
-/* --------- Header & Navigation --------- */
-.main-header {
-    background: #fff;
-    padding: 1rem 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.main-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1100px;
-    margin: auto;
-    padding: 0 2rem;
-}
-
-.main-nav .logo {
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-.main-nav ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-}
-
-.main-nav ul li {
-    margin-left: 20px;
-}
-
-.main-nav ul li a {
-    color: #333;
-    font-weight: 600;
-    padding-bottom: 5px;
-    transition: all 0.3s ease;
-}
-
-.main-nav ul li a.active,
-.main-nav ul li a:hover {
-    color: #0056b3;
-    border-bottom: 2px solid #007bff;
-}
-
-/* --------- Hero Section --------- */
-.hero {
-    background: #2F4F4F;
-    color: #fff;
-    height: 80vh; /* This is a critical style that is currently missing */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.hero-content {
-    animation: fadeIn 1.5s 0.2s forwards;
-    opacity: 0;
-}
-
-.hero-content h1 {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-}
-
-.subtitle {
-    font-size: 1.5rem;
-    font-weight: 300;
-}
-
-.btn {
-    display: inline-block;
-    background: #007bff;
-    color: #fff;
-    padding: 1rem 2rem;
-    margin-top: 2rem;
-    border-radius: 5px;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.btn:hover {
-    background: #0056b3;
-    transform: scale(1.05);
-}
-
-/* --------- Footer --------- */
-.main-footer {
-    text-align: center;
-    padding: 2rem;
-    background: #333;
-    color: #fff;
-}
-
-/* --------- Animations --------- */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* --------- Earnings Widget Styles --------- */
+/* --------- New Earnings Widget & Flip Clock Styles --------- */
 #earnings-widget {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2); /* Darker for better contrast */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     z-index: 1001;
-    color: #fff;
-    font-size: 14px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
     overflow: hidden;
     animation: fadeIn 1s 0.5s forwards;
     opacity: 0;
 }
 
 .widget-content {
-    padding: 15px 20px;
-}
-
-.widget-line-1, .widget-line-2 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 20px;
 }
 
 .widget-line-1 {
-    margin-bottom: 10px;
-}
-
-#earnings-widget span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
     color: rgba(255, 255, 255, 0.8);
 }
 
 #earnings-widget select {
     background: rgba(0, 0, 0, 0.3);
     color: #fff;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 5px;
     padding: 5px 10px;
     margin-left: 10px;
@@ -169,40 +39,210 @@ a {
 }
 
 #earnings-display {
-    font-size: 28px;
-    font-weight: 600;
+    display: flex; /* Aligns the digits */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styles for each character slot (digit or symbol) */
+.char-slot {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 500;
     color: #fff;
-    margin-right: 10px;
-    line-height: 1;
 }
 
-.widget-line-2 .subtext {
-    font-size: 12px;
-    font-weight: 300;
-    text-align: right;
+/* Styles for the flipping digit container */
+.digit {
+    position: relative;
+    height: 3.5rem;
+    width: 2rem;
+    margin: 0 0.1rem;
+    perspective: 150px; /* This enables the 3D effect */
 }
 
-/* --------- Responsive Design --------- */
+/* The static bottom part of the digit and the number on the top flap */
+.digit .base, .digit .flap-front {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 3.5rem;
+    text-align: center;
+}
+
+/* The flap element that performs the animation */
+.digit .flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transform-origin: bottom;
+}
+
+.digit .flap.flipping {
+    animation: flip 0.6s ease-in-out;
+}
+
+/* The front and back faces of the flap */
+.flap .flap-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    line-height: 3.5rem; /* Aligns number vertically */
+    text-align: center;
+    backface-visibility: hidden; /* Hides the back of the element when flipped */
+}
+
+.flap .flap-back {
+    transform: rotateX(180deg);
+}
+
+/* The animation keyframes */
+@keyframes flip {
+    0% {
+        transform: rotateX(0deg);
+    }
+    100% {
+        transform: rotateX(-180deg);
+    }
+}
+
+/* Responsive adjustments */
 @media(max-width: 768px) {
-    .main-nav {
-        flex-direction: column;
+    .char-slot { font-size: 2rem; }
+    .digit { height: 3rem; width: 1.5rem; }
+    .digit .base, .digit .flap-front { line-height: 3rem; }
+    #earnings-widget { left: 10px; right: 10px; bottom: 10px; }
+}```
+
+---
+
+### **3. `script.js` (The New Flip-Clock Engine)**
+
+This script is completely rewritten to handle the complex logic of rendering and animating the individual digits. Replace your entire `script.js` file with this.
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+
+    const earningsPerSecond = {
+        bezos: 985, musking: 631, trump: 12, page: 951,
+        arnault: 196, zuckerberg: 469, gates: 117
+    };
+
+    const personSelect = document.getElementById('person-select');
+    const displayContainer = document.getElementById('earnings-display');
+    
+    let selectedPerson = 'bezos';
+    const startTime = Date.now();
+    let lastDisplayedString = "";
+
+    /**
+     * Creates the HTML structure for a single flipping digit.
+     */
+    function createDigitElement() {
+        const digit = document.createElement('div');
+        digit.className = 'digit';
+        digit.innerHTML = `
+            <span class="base">0</span>
+            <div class="flap">
+                <span class="flap-face flap-front">0</span>
+                <span class="flap-face flap-back">0</span>
+            </div>
+        `;
+        return digit;
+    }
+    
+    /**
+     * Creates the HTML for a static character (like '$' or ',').
+     */
+    function createCharElement(char) {
+        const charSlot = document.createElement('div');
+        charSlot.className = 'char-slot';
+        charSlot.textContent = char;
+        return charSlot;
     }
 
-    .main-nav ul {
-        margin-top: 1rem;
+    /**
+     * The main rendering loop.
+     */
+    function updateDisplay() {
+        const elapsedTimeMs = Date.now() - startTime;
+        const ratePerSecond = earningsPerSecond[selectedPerson];
+        const currentEarnings = (elapsedTimeMs / 1000) * ratePerSecond;
+        
+        // Format the number into a display string, e.g., "$1,234.56"
+        const earningsString = currentEarnings.toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD'
+        });
+
+        // Only update the DOM if the string has actually changed
+        if (earningsString === lastDisplayedString) {
+            requestAnimationFrame(updateDisplay);
+            return;
+        }
+
+        // If the length changes (e.g., $999 -> $1,000), rebuild the entire display
+        if (earningsString.length !== lastDisplayedString.length) {
+            displayContainer.innerHTML = ''; // Clear previous structure
+            for (const char of earningsString) {
+                if (/\d/.test(char)) { // If it's a digit
+                    displayContainer.appendChild(createDigitElement());
+                } else { // If it's a symbol
+                    displayContainer.appendChild(createCharElement(char));
+                }
+            }
+        }
+
+        // Update each digit slot
+        const digitElements = displayContainer.querySelectorAll('.digit');
+        const charElements = Array.from(displayContainer.children);
+        let digitIndex = 0;
+
+        for (let i = 0; i < earningsString.length; i++) {
+            const char = earningsString[i];
+            const oldChar = lastDisplayedString[i] || '';
+            const element = charElements[i];
+
+            if (element.classList.contains('digit')) {
+                if (char !== oldChar) {
+                    const flap = element.querySelector('.flap');
+                    const base = element.querySelector('.base');
+                    const flapFront = element.querySelector('.flap-front');
+                    const flapBack = element.querySelector('.flap-back');
+
+                    if (!flap.classList.contains('flipping')) {
+                        base.textContent = char;
+                        flapFront.textContent = oldChar;
+                        flapBack.textContent = char;
+                        
+                        flap.classList.add('flipping');
+
+                        flap.addEventListener('animationend', () => {
+                            flapFront.textContent = char;
+                            flap.classList.remove('flipping');
+                        }, { once: true });
+                    }
+                }
+                digitIndex++;
+            }
+        }
+
+        lastDisplayedString = earningsString;
+        requestAnimationFrame(updateDisplay);
     }
 
-    .hero-content h1 {
-        font-size: 2.5rem;
-    }
+    // --- Event Listener ---
+    personSelect.addEventListener('change', (e) => {
+        selectedPerson = e.target.value;
+        // No need to reset anything; the loop will pick up the change
+    });
 
-    #earnings-widget {
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
-    }
-
-    #earnings-display {
-        font-size: 24px;
-    }
-}
+    // --- Initial Call ---
+    requestAnimationFrame(updateDisplay);
+});
