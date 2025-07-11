@@ -1,165 +1,170 @@
-/* General Styles */
- body {
-     font-family: 'Poppins', sans-serif;
-     margin: 0;
-     background-color: #f4f4f4;
-     color: #333;
-     line-height: 1.6;
- }
+/* --------- General Styles --------- */
+/* These rules apply to the entire website unless overridden. */
 
- a {
-     text-decoration: none;
-     color: #007bff;
- }
+body {
+    font-family: 'Poppins', sans-serif; /* Sets the default font for the site. */
+    margin: 0; /* Removes the default margin around the body. */
+    background-color: #f4f4f4; /* A light gray background color for the page. */
+    color: #333; /* A dark gray for text, which is easy to read. */
+    line-height: 1.6; /* Sets the spacing between lines of text. */
+}
 
- .container {
-     max-width: 1100px;
-     margin: auto;
-     overflow: hidden;
-     padding: 0 2rem;
- }
+a {
+    text-decoration: none; /* Removes the underline from links. */
+    color: #007bff; /* A standard blue color for links. */
+}
 
- /* Header & Navigation */
- .main-header {
-     background: #fff;
-     padding: 1rem 0;
-     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
- }
+/* --------- Header & Navigation --------- */
 
- .main-nav {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     max-width: 1100px;
-     margin: auto;
-     padding: 0 2rem;
- }
+.main-header {
+    background: #fff; /* A white background for the header. */
+    padding: 1rem 0; /* Adds padding on the top and bottom. */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* A subtle shadow to lift the header off the page. */
+}
 
- .main-nav .logo {
-     font-size: 1.5rem;
-     font-weight: 600;
- }
+.main-nav {
+    display: flex; /* Uses Flexbox to create a flexible layout. */
+    justify-content: space-between; /* Puts space between the logo and the nav links. */
+    align-items: center; /* Vertically aligns the items in the center. */
+    max-width: 1100px; /* Sets a maximum width for the content. */
+    margin: auto; /* Centers the navigation bar on the page. */
+    padding: 0 2rem; /* Adds padding on the left and right. */
+}
 
- .main-nav ul {
-     display: flex;
-     list-style: none;
-     padding: 0;
- }
+.main-nav .logo {
+    font-size: 1.5rem; /* Makes the logo text larger. */
+    font-weight: 600; /* Makes the logo font bold. */
+}
 
- .main-nav ul li {
-     margin-left: 20px;
- }
+.main-nav ul {
+    display: flex; /* Aligns the list items in a row. */
+    list-style: none; /* Removes the default bullet points from the list. */
+    padding: 0; /* Removes default padding. */
+}
 
- .main-nav ul li a {
-     color: #333;
-     font-weight: 600;
-     padding-bottom: 5px;
- }
+.main-nav ul li {
+    margin-left: 20px; /* Adds space between the navigation items. */
+}
 
- .main-nav ul li a.active,
- .main-nav ul li a:hover {
-     border-bottom: 2px solid #007bff;
- }
+.main-nav ul li a {
+    color: #333; /* Sets the text color for navigation links. */
+    font-weight: 600; /* Makes the link text bold. */
+    padding-bottom: 5px; /* Adds space for the bottom border on hover. */
+}
 
- /* Hero Section */
- .hero {
-     background: #2F4F4F; /* This color has been changed */
-     color: #fff;
-     height: 80vh;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     text-align: center;
- }
+/* This rule applies a border to the active page link or when hovering over a link. */
+.main-nav ul li a.active,
+.main-nav ul li a:hover {
+    border-bottom: 2px solid #007bff; /* Adds a blue underline effect. */
+}
 
- .hero-content h1 {
-     font-size: 4rem;
-     margin-bottom: 1rem;
- }
+/* --------- Hero Section --------- */
+/* This is the large banner on the homepage. */
 
- .subtitle {
-     font-size: 1.5rem;
-     font-weight: 300;
- }
+.hero {
+    background: #2F4F4F; /* A dark slate gray background color. */
+    color: #fff; /* White text color for contrast. */
+    height: 80vh; /* Sets the height to 80% of the viewport height. */
+    display: flex; /* Uses Flexbox for centering content. */
+    justify-content: center; /* Horizontally centers the content. */
+    align-items: center; /* Vertically centers the content. */
+    text-align: center; /* Centers the text inside the hero section. */
+}
 
- .btn {
-     display: inline-block;
-     background: #007bff;
-     color: #fff;
-     padding: 1rem 2rem;
-     margin-top: 2rem;
-     border-radius: 5px;
-     transition: background 0.3s;
- }
+.hero-content h1 {
+    font-size: 4rem; /* A large font size for the main headline. */
+    margin-bottom: 1rem; /* Adds space below the headline. */
+}
 
- .btn:hover {
-     background: #0056b3;
- }
+.subtitle {
+    font-size: 1.5rem; /* A smaller font size for the subtitle. */
+    font-weight: 300; /* A lighter font weight. */
+}
 
- /* Contact & Privacy Sections */
- .contact-section, .privacy-section {
-     padding: 4rem 0;
-     background: #fff;
- }
+.btn {
+    display: inline-block; /* Allows setting padding and margin on the link. */
+    background: #007bff; /* Blue background color for the button. */
+    color: #fff; /* White text color. */
+    padding: 1rem 2rem; /* Adds padding inside the button. */
+    margin-top: 2rem; /* Adds space above the button. */
+    border-radius: 5px; /* Rounds the corners of the button. */
+    transition: background 0.3s; /* Smoothly animates the background color change on hover. */
+}
 
- .contact-container, .privacy-container {
-     max-width: 800px;
-     margin: auto;
-     padding: 0 2rem;
- }
+.btn:hover {
+    background: #0056b3; /* A darker blue on hover to provide feedback. */
+}
 
- .contact-section h2, .privacy-section h2 {
-     text-align: center;
-     margin-bottom: 2rem;
-     font-size: 2.5rem;
- }
+/* --------- Content Sections (Contact & Privacy) --------- */
 
- .contact-info {
-     text-align: center;
-     margin-bottom: 2rem;
-     font-size: 1.2rem;
- }
+.contact-section, .privacy-section {
+    padding: 4rem 0; /* Adds significant vertical padding to create space. */
+    background: #fff; /* A white background to separate it from the body. */
+}
 
- .contact-form .form-group {
-     margin-bottom: 1.5rem;
- }
+.contact-container, .privacy-container {
+    max-width: 800px; /* A comfortable width for reading text content. */
+    margin: auto; /* Centers the container. */
+    padding: 0 2rem; /* Adds horizontal padding. */
+}
 
- .contact-form label {
-     display: block;
-     margin-bottom: .5rem;
- }
+.contact-section h2, .privacy-section h2 {
+    text-align: center; /* Centers the main heading of the section. */
+    margin-bottom: 2rem; /* Adds space below the heading. */
+    font-size: 2.5rem; /* A large font size for the section title. */
+}
 
- .contact-form input,
- .contact-form textarea {
-     width: 100%;
-     padding: .8rem;
-     border: 1px solid #ddd;
-     border-radius: 5px;
- }
+/* --------- Form Styles --------- */
 
- /* Footer */
- .main-footer {
-     text-align: center;
-     padding: 2rem;
-     background: #333;
-     color: #fff;
- }
+.contact-info {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+}
 
- /* Responsive */
- @media(max-width: 768px) {
-     .main-nav {
-         flex-direction: column;
-     }
+.contact-form .form-group {
+    margin-bottom: 1.5rem; /* Adds space between each form field. */
+}
 
-     .main-nav ul {
-         margin-top: 1rem;
-     }
+.contact-form label {
+    display: block; /* Makes the label take up its own line. */
+    margin-bottom: .5rem; /* Adds space between the label and the input field. */
+}
 
-     .hero-content h1 {
-         font-size: 2.5rem;
-     }
+.contact-form input,
+.contact-form textarea {
+    width: 100%; /* Makes the input fields take up the full width of their container. */
+    padding: .8rem; /* Adds padding inside the fields. */
+    border: 1px solid #ddd; /* A light gray border. */
+    border-radius: 5px; /* Rounds the corners. */
+}
 
-     .subtitle {
-         font-size: 1.2rem;
-     }
- }
+/* --------- Footer --------- */
+
+.main-footer {
+    text-align: center; /* Centers the footer text. */
+    padding: 2rem; /* Adds padding to the footer. */
+    background: #333; /* A dark background for the footer. */
+    color: #fff; /* White text color. */
+}
+
+/* --------- Responsive Design --------- */
+/* This media query applies styles only on screens 768px or smaller (like tablets and phones). */
+
+@media(max-width: 768px) {
+    .main-nav {
+        flex-direction: column; /* Stacks the logo and navigation links vertically. */
+    }
+
+    .main-nav ul {
+        margin-top: 1rem; /* Adds space between the logo and the nav links on small screens. */
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem; /* Reduces the font size of the main headline for smaller screens. */
+    }
+
+    .subtitle {
+        font-size: 1.2rem; /* Reduces the subtitle font size. */
+    }
+}
