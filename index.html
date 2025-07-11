@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
 
-    <!-- ALL STYLES ARE INLINED HERE TO GUARANTEE THEY LOAD -->
+    <!-- ALL STYLES ARE INLINED TO GUARANTEE THEY LOAD -->
     <style>
         :root {
             --bg-color: #0A0A0A;
@@ -19,9 +19,7 @@
         }
 
         *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            box-sizing: border-box; margin: 0; padding: 0;
         }
 
         body {
@@ -31,18 +29,29 @@
             padding: 2rem;
         }
         
-        /* Main page layout */
         .page-container {
             max-width: 800px;
             margin: 0 auto;
             text-align: center;
-            padding-top: 5vh;
+            padding-top: 10vh;
         }
 
         .hero h1 {
             font-size: 4.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
+            background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: aurora-text 10s ease infinite;
+        }
+
+        @keyframes aurora-text {
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
         }
 
         .hero p {
@@ -50,138 +59,102 @@
             color: rgba(255, 255, 255, 0.7);
         }
 
-        /* Fun Switch in the corner */
         .fun-switch-container {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 0.9rem;
+            position: fixed; top: 2rem; right: 2rem; display: flex;
+            align-items: center; gap: 0.75rem; font-size: 0.9rem;
         }
 
         .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 28px;
+            position: relative; display: inline-block; width: 50px; height: 28px;
         }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #2c2c2e;
-            transition: .4s;
-            border-radius: 28px;
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #2c2c2e; transition: .4s; border-radius: 28px;
         }
-
         .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
+            position: absolute; content: ""; height: 20px; width: 20px;
+            left: 4px; bottom: 4px; background-color: white;
+            transition: .4s; border-radius: 50%;
         }
-
-        input:checked + .slider {
-            background-color: var(--primary-color);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(22px);
-        }
+        input:checked + .slider { background-color: var(--primary-color); }
+        input:checked + .slider:before { transform: translateX(22px); }
         
-        /* The Earnings Widget - Hidden by default */
         .earnings-widget {
-            position: fixed;
-            bottom: 2rem;
-            left: 2rem;
+            position: fixed; bottom: 2rem; left: 2rem;
             background: rgba(28, 28, 30, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.25rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            width: 320px;
-            
-            /* Hidden state */
-            opacity: 0;
-            visibility: hidden;
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 1.25rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 340px;
+            opacity: 0; visibility: hidden;
             transform: translateY(20px);
             transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
         }
         
-        /* Visible state - toggled by JS */
         .earnings-widget.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+            opacity: 1; visibility: visible; transform: translateY(0);
         }
         
         .widget-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1rem; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);
         }
 
         .widget-controls select {
-            background: #3a3a3c;
-            color: var(--text-color);
+            background: #3a3a3c; color: var(--text-color);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            padding: 0.3rem 0.5rem;
+            border-radius: 5px; padding: 0.3rem 0.5rem;
         }
         
-        /* New Odometer Display */
-        .odometer-display {
-            display: flex;
-            height: 3.5rem; /* Each digit's container height */
-            overflow: hidden; /* Critical for the effect */
-            font-family: 'Roboto Mono', monospace;
-            font-size: 3rem;
-            font-weight: 500;
-        }
-        
-        .char-container {
-            height: 100%;
+        /* New Robust Flip Clock Styles */
+        .flip-clock-display {
+            display: flex; justify-content: center; align-items: center;
+            height: 4rem; font-family: 'Roboto Mono', monospace;
+            font-size: 3rem; font-weight: 500;
         }
 
-        .digit-strip {
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.5s ease-in-out; /* The smooth scroll animation */
+        .char-slot { position: relative; }
+        .digit {
+            position: relative; height: 4rem; width: 2.5rem;
+            margin: 0 0.1rem; perspective: 300px;
         }
         
-        .digit-strip span {
-            height: 3.5rem; /* Must match container height */
-            line-height: 3.5rem;
+        .digit .static-top, .digit .flipper-bottom-face {
+            line-height: 4rem; position: absolute; top: 0; left: 0;
+            width: 100%; height: 50%; text-align: center;
+            overflow: hidden;
         }
+        
+        .digit .static-bottom, .digit .flipper-top-face {
+            line-height: 0; position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 50%; text-align: center;
+            overflow: hidden;
+        }
+
+        .digit .flipper {
+            position: absolute; top: 0; left: 0; width: 100%; height: 50%;
+            transform-style: preserve-3d; transform-origin: bottom;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .flipper-face {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden;
+        }
+        
+        .flipper .flipper-bottom-face { transform: rotateX(180deg); }
+        .flipper.flipping { transform: rotateX(-180deg); }
 
         /* Responsive */
         @media (max-width: 600px) {
             .hero h1 { font-size: 3rem; }
             .fun-switch-container { top: 1rem; right: 1rem; }
             .earnings-widget { left: 1rem; right: 1rem; bottom: 1rem; width: auto; }
-            .odometer-display { font-size: 2.2rem; height: 3rem; }
-            .digit-strip span { height: 3rem; line-height: 3rem; }
+            .flip-clock-display { font-size: 2.2rem; height: 3rem; }
+            .digit { height: 3rem; width: 1.8rem; }
+            .digit .static-top, .digit .flipper-bottom-face { line-height: 3rem; }
         }
-
     </style>
 </head>
 <body>
@@ -195,12 +168,8 @@
     </div>
 
     <div class="page-container">
-        <header class="header">
-            <!-- Header content can be added later -->
-        </header>
-
         <section class="hero">
-            <h1>Dennis Heba</h1>
+            <h1>Stunningly Simple.</h1>
             <p>A clean and modern website built with HTML, CSS & JavaScript.</p>
         </section>
     </div>
@@ -218,7 +187,7 @@
                 <option value="gates">Bill Gates</option>
             </select>
         </div>
-        <div class="odometer-display" id="earnings-display"></div>
+        <div class="flip-clock-display" id="earnings-display"></div>
     </div>
 
 
@@ -230,79 +199,105 @@
                 arnault: 196, zuckerberg: 469, gates: 117
             };
 
+            // DOM Elements
             const funSwitch = document.getElementById('fun-switch-checkbox');
             const widget = document.getElementById('earnings-widget');
             const personSelect = document.getElementById('person-select');
             const displayContainer = document.getElementById('earnings-display');
             
+            // State Management
             let selectedPerson = 'bezos';
-            let startTime = 0;
             let animationFrameId = null;
+            let lastToggleOnTime = 0;
+            let totalTimeOn = 0; // Tracks total time the switch has been 'on'
+            let digitElements = [];
 
-            // --- The Odometer Logic ---
-            function createOdometer(initialString) {
+            // --- Clock Building and Animation Logic ---
+            function createClock(templateString) {
                 displayContainer.innerHTML = '';
-                for (const char of initialString) {
-                    const charContainer = document.createElement('div');
-                    charContainer.className = 'char-container';
-
+                digitElements = [];
+                for (const char of templateString) {
+                    const charSlot = document.createElement('div');
+                    charSlot.className = 'char-slot';
                     if (/\d/.test(char)) {
-                        const strip = document.createElement('div');
-                        strip.className = 'digit-strip';
-                        for (let i = 0; i <= 9; i++) {
-                            const digitSpan = document.createElement('span');
-                            digitSpan.textContent = i;
-                            strip.appendChild(digitSpan);
-                        }
-                        charContainer.appendChild(strip);
+                        charSlot.classList.add('digit');
+                        charSlot.innerHTML = `
+                            <div class="static-top">${char}</div>
+                            <div class="static-bottom">${char}</div>
+                            <div class="flipper">
+                                <div class="flipper-face flipper-top-face">${char}</div>
+                                <div class="flipper-face flipper-bottom-face">${char}</div>
+                            </div>`;
                     } else {
-                        charContainer.textContent = char;
+                        charSlot.textContent = char;
                     }
-                    displayContainer.appendChild(charContainer);
-                }
-            }
-
-            function updateOdometer(newString) {
-                const charElements = Array.from(displayContainer.children);
-                if (newString.length !== charElements.length) {
-                    createOdometer(newString);
-                }
-
-                for (let i = 0; i < newString.length; i++) {
-                    const char = newString[i];
-                    const charContainer = charElements[i];
-                    const strip = charContainer.querySelector('.digit-strip');
-                    if (strip) {
-                        const digitValue = parseInt(char, 10);
-                        const digitHeight = strip.querySelector('span').clientHeight;
-                        strip.style.transform = `translateY(-${digitValue * digitHeight}px)`;
-                    }
+                    displayContainer.appendChild(charSlot);
+                    digitElements.push(charSlot);
                 }
             }
             
-            // --- The Animation Loop ---
+            function flipDigit(digitElement, newChar, oldChar) {
+                const flipper = digitElement.querySelector('.flipper');
+                if (flipper.classList.contains('flipping')) return;
+
+                const topFace = digitElement.querySelector('.flipper-top-face');
+                const bottomFace = digitElement.querySelector('.flipper-bottom-face');
+                const staticTop = digitElement.querySelector('.static-top');
+                
+                topFace.textContent = oldChar;
+                bottomFace.textContent = newChar;
+                staticTop.textContent = newChar;
+
+                flipper.classList.add('flipping');
+
+                flipper.addEventListener('transitionend', () => {
+                    digitElement.querySelector('.static-bottom').textContent = newChar;
+                    flipper.classList.remove('flipping');
+                    flipper.style.transition = 'none'; // Prevent animation on reset
+                    flipper.style.transform = 'rotateX(0deg)';
+                    requestAnimationFrame(() => { // Re-enable transition for next flip
+                        flipper.style.transition = 'transform 0.5s ease-in-out';
+                    });
+                }, { once: true });
+            }
+
+            let lastDisplayedString = '$0.00';
+            createClock(lastDisplayedString); // Initial setup
+
+            // --- Animation Loop ---
             function animateEarnings() {
-                const elapsedTimeMs = Date.now() - startTime;
+                const timeSinceLastToggle = Date.now() - lastToggleOnTime;
+                const totalElapsedMs = totalTimeOn + timeSinceLastToggle;
                 const ratePerSecond = earningsPerSecond[selectedPerson];
-                const currentEarnings = (elapsedTimeMs / 1000) * ratePerSecond;
+                const currentEarnings = (totalElapsedMs / 1000) * ratePerSecond;
                 
                 const earningsString = currentEarnings.toLocaleString('en-US', {
                     style: 'currency', currency: 'USD'
-                }).replace(/\$/g, ''); // Remove dollar sign for pure odometer
+                });
 
-                updateOdometer('$' + earningsString); // Add the dollar sign back as a static char
+                if (earningsString.length !== lastDisplayedString.length) {
+                    createClock(earningsString);
+                }
+
+                for (let i = 0; i < earningsString.length; i++) {
+                    if (earningsString[i] !== lastDisplayedString[i]) {
+                        const element = digitElements[i];
+                        if (element.classList.contains('digit')) {
+                            flipDigit(element, earningsString[i], lastDisplayedString[i]);
+                        }
+                    }
+                }
                 
+                lastDisplayedString = earningsString;
                 animationFrameId = requestAnimationFrame(animateEarnings);
             }
 
-            // --- Event Listener for the Switch ---
+            // --- Event Listeners ---
             funSwitch.addEventListener('change', () => {
                 if (funSwitch.checked) {
                     // Turn On
                     widget.classList.add('visible');
-                    if (startTime === 0) { // Start timer only on the first turn-on
-                        startTime = Date.now();
-                    }
+                    lastToggleOnTime = Date.now();
                     if (animationFrameId === null) {
                        animateEarnings();
                     }
@@ -312,6 +307,7 @@
                     if (animationFrameId) {
                         cancelAnimationFrame(animationFrameId);
                         animationFrameId = null;
+                        totalTimeOn += Date.now() - lastToggleOnTime;
                     }
                 }
             });
@@ -319,10 +315,7 @@
             personSelect.addEventListener('change', (e) => {
                 selectedPerson = e.target.value;
             });
-            
-            // Initialize with a placeholder
-            createOdometer('$0.00');
         });
     </script>
 </body>
-</html>
+</html>```
