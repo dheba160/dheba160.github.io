@@ -57,7 +57,7 @@
             -webkit-text-fill-color: transparent;
         }
         
-        /* Proximity Buttons - Refined */
+        /* Button Interaction Redesigned */
         .button-container {
             min-height: 100px;
             display: flex;
@@ -67,9 +67,10 @@
         }
 
         .aurora-button {
-            /* Default state: hidden via clip-path */
+            /* Default state: hidden */
             clip-path: circle(0% at 50% 50%);
-            transition: clip-path 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            /* The transition is now on the button itself */
+            transition: clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             
             position: relative;
             display: inline-block;
@@ -77,11 +78,19 @@
             z-index: 1;
         }
         
-        /* NEW: Visible state class controlled by JS */
-        .aurora-button.is-visible {
-            clip-path: circle(75% at 50% 50%); /* 75% creates a cleaner pop effect */
+        /* NEW: This class, added by JS, triggers the animation */
+        .buttons-activated .aurora-button {
+            clip-path: circle(75% at 50% 50%);
         }
         
+        /* NEW: Staggered reveal animation using transition-delay */
+        .buttons-activated .aurora-button:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+        .buttons-activated .aurora-button:nth-child(3) {
+            transition-delay: 0.2s;
+        }
+
         .aurora-button .content {
             display: block;
             padding: 0.75rem 1.75rem;
@@ -138,7 +147,7 @@
     <div class="page-container">
         <section class="hero">
             <h1 class="aurora-gradient">Stunningly Simple.</h1>
-            <div class="button-container">
+            <div class="button-container" id="button-trigger-area">
                 <a href="#" class="aurora-button" id="btn-work">
                     <span class="content aurora-gradient">My Work</span>
                 </a>
@@ -179,12 +188,12 @@
             updateEarnings();
 
 
-            // --- RE-ARCHITECTED: High-Performance Proximity Logic ---
-            const buttons = Array.from(document.querySelectorAll('.aurora-button'));
-            const maxDistance = 150; 
+            // --- RE-ARCHITECTED: One-Time Reveal Logic ---
+            const buttonTriggerArea = document.getElementById('button-trigger-area');
+            let buttonsHaveBeenRevealed = false; // A flag to ensure this only runs once.
 
-            // This function attaches the gradient background to the ::before pseudo-element
-            buttons.forEach(button => {
+            // This function attaches the gradient background to each button's border
+            document.querySelectorAll('.aurora-button').forEach(button => {
                 const computedStyle = window.getComputedStyle(document.body.querySelector('.aurora-gradient'));
                 const gradient = computedStyle.getPropertyValue('background-image');
                 const borderElement = document.createElement('style');
@@ -192,39 +201,20 @@
                 document.head.appendChild(borderElement);
             });
 
-            function handleMouseMove(event) {
-                const mouseX = event.clientX;
-                const mouseY = event.clientY;
+            function revealButtons() {
+                // If we've already run this, do nothing. This is the key to making it permanent.
+                if (buttonsHaveBeenRevealed) {
+                    return;
+                }
+                // Set the flag to true so it never runs again.
+                buttonsHaveBeenRevealed = true;
                 
-                let closestButton = null;
-                let minDistance = Infinity;
-
-                // Step 1: Find the single closest button
-                buttons.forEach(button => {
-                    const rect = button.getBoundingClientRect();
-                    const buttonX = rect.left + rect.width / 2;
-                    const buttonY = rect.top + rect.height / 2;
-                    const distance = Math.sqrt(Math.pow(mouseX - buttonX, 2) + Math.pow(mouseY - buttonY, 2));
-                    
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestButton = button;
-                    }
-                });
-                
-                // Step 2: Update only the necessary buttons
-                buttons.forEach(button => {
-                    if (button === closestButton && minDistance < maxDistance) {
-                        // If this is the closest button AND it's within range, make it visible.
-                        button.classList.add('is-visible');
-                    } else {
-                        // Otherwise, ensure it is hidden.
-                        button.classList.remove('is-visible');
-                    }
-                });
+                // Add the magic class that triggers the CSS animations.
+                buttonTriggerArea.classList.add('buttons-activated');
             }
             
-            window.addEventListener('mousemove', handleMouseMove);
+            // Listen for the mouse entering the trigger area for the first time.
+            buttonTriggerArea.addEventListener('mouseenter', revealButtons);
         });
     </script>
 </body>
