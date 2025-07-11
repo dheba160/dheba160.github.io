@@ -12,6 +12,12 @@
     <!-- ALL STYLES ARE INLINED TO GUARANTEE THEY LOAD -->
     <style>
         :root {
+            /* These will be populated by JavaScript with random gradients */
+            --main-gradient: linear-gradient(90deg, #FAD961, #F76B1C);
+            --button-1-gradient: linear-gradient(90deg, #84fab0, #8fd3f4);
+            --button-2-gradient: linear-gradient(90deg, #a18cd1, #fbc2eb);
+            --button-3-gradient: linear-gradient(90deg, #ff8581, #ffc085);
+            
             --bg-color: #0A0A0A;
             --text-color: #EAEAEA;
         }
@@ -25,115 +31,85 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             padding: 2rem;
-            overflow: hidden; /* Prevents scrollbars from flash-appearing */
+            overflow: hidden;
         }
         
         .page-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            min-height: 80vh;
+            display: flex; justify-content: center; align-items: center;
+            text-align: center; min-height: 80vh;
         }
 
         .gradient-text {
             font-weight: 700;
-            background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
+            background: var(--main-gradient); /* Uses the random gradient */
             background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
+            -webkit-background-clip: text; background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: aurora-text 8s ease infinite;
+            animation: flow-gradient 8s ease infinite;
         }
 
-        @keyframes aurora-text {
+        @keyframes flow-gradient {
             0%{background-position:0% 50%}
             50%{background-position:100% 50%}
             100%{background-position:0% 50%}
         }
 
         .hero h1 {
-            font-size: 5rem;
-            margin-bottom: 2rem; 
+            font-size: 5rem; margin-bottom: 2rem;
         }
         
-        /* --------- Proximity Buttons --------- */
         .button-container {
-            min-height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            min-height: 100px; display: flex;
+            justify-content: center; align-items: center;
             gap: 1.5rem;
         }
 
         .outline-btn {
-            /* Initial state: invisible and ready for JS control */
             opacity: 0;
             transform: scale(0.95);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-
-            position: relative;
-            display: inline-block;
-            padding: 0.75rem 1.75rem;
-            border-radius: 50px;
-            color: var(--text-color);
-            text-decoration: none;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            position: relative; display: inline-block;
+            padding: 0.75rem 1.75rem; border-radius: 50px;
+            color: var(--text-color); text-decoration: none;
             font-weight: 500;
-            background-color: var(--bg-color); /* Match page background */
+            background-color: transparent; /* HOLLOW BY DEFAULT */
             z-index: 1;
         }
 
         /* Gradient border created using a pseudo-element */
         .outline-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px;
-            width: calc(100% + 4px);
-            height: calc(100% + 4px);
-            border-radius: 50px;
-            z-index: -1;
-            transition: opacity 0.4s ease;
+            content: ''; position: absolute; top: -2px; left: -2px;
+            width: calc(100% + 4px); height: calc(100% + 4px);
+            border-radius: 50px; z-index: -1;
+            background-size: 300% 300%;
+            animation: flow-gradient 6s ease infinite; /* Slower flow for buttons */
         }
         
-        /* Unique Gradients for each button's border */
-        .outline-btn.gradient-1::before {
-            background: linear-gradient(90deg, #84fab0, #8fd3f4);
-        }
-        .outline-btn.gradient-2::before {
-            background: linear-gradient(90deg, #a18cd1, #fbc2eb);
-        }
-        .outline-btn.gradient-3::before {
-            background: linear-gradient(90deg, #ff8581, #ffc085);
-        }
+        /* Each button gets its own random gradient variable */
+        .outline-btn.gradient-1::before { background: var(--button-1-gradient); }
+        .outline-btn.gradient-2::before { background: var(--button-2-gradient); }
+        .outline-btn.gradient-3::before { background: var(--button-3-gradient); }
 
-        /* Fill animation on direct hover */
-        .outline-btn:hover {
-            color: #0A0A0A; /* Dark text for contrast against the fill */
-            transform: scale(1.05) !important; /* !important to override JS scaling */
-        }
-        
-        .outline-btn:hover::before {
-            opacity: 1 !important; /* Ensure border is fully visible on hover */
-        }
-        
+        /* The Fill Layer (initially hidden) */
         .outline-btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border-radius: 50px;
-            z-index: -1;
-            transform: scaleX(0); /* Start with zero width */
-            transform-origin: left;
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; border-radius: 50px;
+            z-index: -1; transform: scaleX(0); transform-origin: left;
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
         
-        .outline-btn.gradient-1::after { background: linear-gradient(90deg, #84fab0, #8fd3f4); }
-        .outline-btn.gradient-2::after { background: linear-gradient(90deg, #a18cd1, #fbc2eb); }
-        .outline-btn.gradient-3::after { background: linear-gradient(90deg, #ff8581, #ffc085); }
+        .outline-btn.gradient-1::after { background: var(--button-1-gradient); }
+        .outline-btn.gradient-2::after { background: var(--button-2-gradient); }
+        .outline-btn.gradient-3::after { background: var(--button-3-gradient); }
+        
+        /* The "Priming" Hover State */
+        .outline-btn:hover {
+            color: #0A0A0A; /* Dark text for readability on fill */
+            transform: scale(1.05) !important;
+        }
         
         .outline-btn:hover::after {
-            transform: scaleX(1); /* Fill the button */
+            transform: scaleX(1); /* Animate the fill */
         }
 
         #earnings-text {
@@ -141,6 +117,11 @@
             font-size: 0.9rem; font-weight: 500;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             opacity: 0; animation: fade-in-up 1s ease 0.5s forwards;
+            background: var(--main-gradient); /* Also uses the random gradient */
+            background-size: 300% 300%;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: flow-gradient 8s ease infinite;
         }
 
         @keyframes fade-in-up {
@@ -161,19 +142,46 @@
         <section class="hero">
             <h1 class="gradient-text">Stunningly Simple.</h1>
             <div class="button-container">
-                <a href="#" class="outline-btn gradient-1" id="btn-work">My Work</a>
-                <a href="#" class="outline-btn gradient-2" id="btn-about">About Me</a>
-                <a href="#" class="outline-btn gradient-3" id="btn-contact">Contact</a>
+                <a href="#" class="outline-btn gradient-1">My Work</a>
+                <a href="#" class="outline-btn gradient-2">About Me</a>
+                <a href="#" class="outline-btn gradient-3">Contact</a>
             </div>
         </section>
     </div>
     
-    <div id="earnings-text" class="gradient-text"></div>
+    <div id="earnings-text"></div>
 
 
     <!-- ALL JAVASCRIPT IS INLINED HERE -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- NEW: Random Gradient Generation ---
+            function generateRandomHSL() {
+                const hue = Math.floor(Math.random() * 360);
+                return `hsl(${hue}, 90%, 65%)`; // Vibrant, pleasing colors
+            }
+
+            function generateRandomGradient() {
+                const color1 = generateRandomHSL();
+                const color2 = generateRandomHSL();
+                return `linear-gradient(90deg, ${color1}, ${color2})`;
+            }
+
+            // Apply random gradients to the CSS variables
+            const root = document.documentElement;
+            root.style.setProperty('--main-gradient', generateRandomGradient());
+            root.style.setProperty('--button-1-gradient', generateRandomGradient());
+            root.style.setProperty('--button-2-gradient', generateRandomGradient());
+            root.style.setProperty('--button-3-gradient', generateRandomGradient());
+            
+            // Re-apply the gradient to the earnings text which might miss the initial paint
+            const earningsTextElement = document.getElementById('earnings-text');
+            earningsTextElement.style.background = 'var(--main-gradient)';
+            earningsTextElement.style.backgroundSize = '300% 300%';
+            earningsTextElement.style.webkitBackgroundClip = 'text';
+            earningsTextElement.style.backgroundClip = 'text';
+
+
             // --- Earnings Calculator Logic (remains unchanged) ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 }, musk: { name: 'Elon Musk', rate: 631 },
@@ -183,7 +191,6 @@
             };
             const personKeys = Object.keys(people);
             const chosenPerson = people[personKeys[Math.floor(Math.random() * personKeys.length)]];
-            const earningsTextElement = document.getElementById('earnings-text');
             const startTime = Date.now();
 
             function updateEarnings() {
@@ -194,34 +201,26 @@
             }
             updateEarnings();
 
-
-            // --- NEW: Proximity Button Logic ---
+            // --- Proximity Button Logic ---
             const buttons = document.querySelectorAll('.outline-btn');
-            const maxDistance = 250; // The maximum distance in pixels to react to the mouse
+            const maxDistance = 250; 
 
             function handleMouseMove(event) {
                 const mouseX = event.clientX;
                 const mouseY = event.clientY;
 
                 buttons.forEach(button => {
-                    // Get the position and size of the button
                     const rect = button.getBoundingClientRect();
                     const buttonX = rect.left + rect.width / 2;
                     const buttonY = rect.top + rect.height / 2;
-
-                    // Calculate the distance between the mouse and the button's center
                     const distance = Math.sqrt(Math.pow(mouseX - buttonX, 2) + Math.pow(mouseY - buttonY, 2));
-
-                    // Calculate a proximity factor (0 to 1), where 1 is closest
                     const proximity = Math.max(0, 1 - distance / maxDistance);
-
-                    // Apply the effect. Squaring the proximity makes the effect more dramatic.
-                    button.style.opacity = proximity * proximity;
-                    button.style.transform = `scale(${0.95 + (0.05 * proximity)})`; // Subtle scale up
+                    
+                    // Proximity only affects opacity now. The scale is handled by CSS :hover
+                    button.style.opacity = proximity * proximity; 
                 });
             }
             
-            // Listen for mouse movement on the whole window
             window.addEventListener('mousemove', handleMouseMove);
         });
     </script>
