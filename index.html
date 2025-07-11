@@ -1,13 +1,15 @@
-<!-- The <head> and page structure remain the same -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dennis Heba | Welcome</title>
+    <!-- Font links remain the same -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet"> <!-- Added Mono font for clock -->
-    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    
+    <!-- CACHE-BUSTING: Added '?v=1.1' to force the browser to download the new stylesheet -->
+    <link rel="stylesheet" href="./style.css?v=1.1">
 </head>
 <body>
 
@@ -31,7 +33,6 @@
             </div>
         </section>
 
-        <!-- Earnings Widget - The JS will build the clock inside #earnings-display -->
         <div id="earnings-widget">
             <div class="widget-content">
                 <div class="widget-line-1">
@@ -46,7 +47,6 @@
                         <option value="gates">Bill Gates</option>
                     </select>
                 </div>
-                <!-- This is now the container for our flip clock -->
                 <div id="earnings-display"></div>
             </div>
         </div>
@@ -56,6 +56,7 @@
         <p>© 2025 Dennis Heba.</p>
     </footer>
 
-    <script src="./script.js"></script>
+    <!-- CACHE-BUSTING: Added '?v=1.1' to force the browser to download the new script -->
+    <script src="./script.js?v=1.1"></script>
 </body>
 </html>
