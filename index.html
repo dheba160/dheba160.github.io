@@ -5,16 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dennis Heba | Welcome</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- The link below is the most important part. It must find your style.css file. -->
+    <link rel="stylesheet" href="./style.css">
+
 </head>
 <body>
     <header class="main-header">
         <nav class="main-nav">
             <div class="logo">Dennis Heba</div>
             <ul>
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="./index.html" class="active">Home</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="./privacy.html">Privacy Policy</a></li>
             </ul>
         </nav>
     </header>
@@ -24,7 +27,7 @@
             <div class="hero-content">
                 <h1>Stunningly Simple.</h1>
                 <p class="subtitle">A clean and modern website built with HTML & CSS.</p>
-                <a href="contact.html" class="btn">Get In Touch</a>
+                <a href="./contact.html" class="btn">Get In Touch</a>
             </div>
         </section>
     </main>
@@ -33,4 +36,16 @@
         <p>© 2025 Dennis Heba.</p>
     </footer>
 </body>
-</html>
+</html>```
+
+**What did I change?**
+
+I changed the links from `href="style.css"` to `href="./style.css"`. This `./` explicitly tells the browser to look in the current directory. I did the same for the navigation links (`index.html`, `contact.html`, etc.) for consistency.
+
+### **Step 3: The Final Checklist**
+
+1.  **Save the File:** Commit the changes to your `index.html` file on GitHub.
+2.  **Wait 60 Seconds:** Give GitHub a moment to see your change and start updating the website.
+3.  **Hard Refresh Your Browser:** This is critical. Go to your website and press **`Ctrl + Shift + R`** (on Windows/Linux) or **`Cmd + Shift + R`** (on Mac). This forces the browser to ignore its saved cache and download all the files again.
+
+If the page still looks the same after this, it is almost a 100% guarantee that the issue lies with the **name or location** of your `style.css` file.
