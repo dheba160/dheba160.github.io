@@ -32,10 +32,9 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            min-height: 80vh; /* Pushes content to the vertical center */
+            min-height: 80vh;
         }
 
-        /* The gradient text style, applied to both elements */
         .gradient-text {
             font-weight: 700;
             background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
@@ -54,41 +53,74 @@
 
         .hero h1 {
             font-size: 5rem;
+            margin-bottom: 1rem; /* Added margin for space */
         }
         
-        /* The new earnings text element */
+        /* --------- NEW: Hover-Reveal Buttons --------- */
+        .hover-reveal-area {
+            min-height: 100px; /* Creates a large, invisible area to hover over */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+            opacity: 0; /* Buttons are hidden by default */
+            transform: translateY(15px); /* Start slightly lower */
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+
+        /* This is the magic: When you hover the area, the buttons appear */
+        .hover-reveal-area:hover .button-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .outline-btn {
+            display: inline-block;
+            padding: 0.75rem 1.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50px; /* Pill shape */
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        /* Styling for when you hover over a specific button */
+        .outline-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: #fff;
+            transform: scale(1.05);
+        }
+        /* --------- END: New Styles --------- */
+
         #earnings-text {
             position: fixed;
             bottom: 1.5rem;
             left: 1.5rem;
-            font-size: 0.9rem; /* Small and classy */
+            font-size: 0.9rem;
             font-weight: 500;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Improves readability */
-            opacity: 0; /* Starts hidden */
-            animation: fade-in-up 1s ease 0.5s forwards; /* Fades in gracefully */
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            animation: fade-in-up 1s ease 0.5s forwards;
         }
 
         @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive */
         @media (max-width: 600px) {
             .hero h1 { font-size: 3rem; }
             #earnings-text { 
-                font-size: 0.8rem;
-                left: 1rem;
-                right: 1rem;
-                text-align: center;
-                bottom: 1rem;
+                font-size: 0.8rem; left: 1rem;
+                right: 1rem; text-align: center; bottom: 1rem;
             }
+            .button-container { flex-direction: column; } /* Stack buttons on mobile */
         }
     </style>
 </head>
@@ -97,18 +129,24 @@
     <div class="page-container">
         <section class="hero">
             <h1 class="gradient-text">Stunningly Simple.</h1>
+
+            <!-- This is the new hover-activated container -->
+            <div class="hover-reveal-area">
+                <div class="button-container">
+                    <a href="#" class="outline-btn">My Work</a>
+                    <a href="#" class="outline-btn">About Me</a>
+                    <a href="#" class="outline-btn">Contact</a>
+                </div>
+            </div>
         </section>
     </div>
     
-    <!-- This is the new, simple text element that will be updated by the script -->
     <div id="earnings-text" class="gradient-text"></div>
 
 
-    <!-- ALL JAVASCRIPT IS INLINED HERE -->
+    <!-- The JavaScript logic remains the same and does not need to be changed -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            // --- Data for the random selection ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 },
                 musk: { name: 'Elon Musk', rate: 631 },
@@ -118,41 +156,22 @@
                 zuckerberg: { name: 'Mark Zuckerberg', rate: 469 },
                 gates: { name: 'Bill Gates', rate: 117 }
             };
-
             const personKeys = Object.keys(people);
-
-            // --- Randomly Select One Person on Page Load ---
-            // This code runs only ONCE.
             const randomIndex = Math.floor(Math.random() * personKeys.length);
             const chosenKey = personKeys[randomIndex];
             const chosenPerson = people[chosenKey];
-
-            // --- DOM Element and Timing ---
             const earningsTextElement = document.getElementById('earnings-text');
-            const startTime = Date.now(); // Start the timer the moment the script runs.
+            const startTime = Date.now();
 
-            // --- The Animation Loop ---
-            // This runs constantly to update the numbers smoothly.
             function updateEarnings() {
-                // Calculate total elapsed time and earnings
                 const elapsedTimeMs = Date.now() - startTime;
                 const currentEarnings = (elapsedTimeMs / 1000) * chosenPerson.rate;
-
-                // Format the number to a currency string (e.g., "$1,234.56")
                 const formattedEarnings = currentEarnings.toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: 'USD'
+                    style: 'currency', currency: 'USD'
                 });
-
-                // Construct the final sentence and update the text on the page
                 earningsTextElement.textContent = `Since you've been here, ${chosenPerson.name} has earned ${formattedEarnings}`;
-
-                // Request the next frame to create a smooth, continuous animation
                 requestAnimationFrame(updateEarnings);
             }
-
-            // --- Initial Call ---
-            // Start the entire process.
             updateEarnings();
         });
     </script>
