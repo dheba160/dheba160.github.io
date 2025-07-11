@@ -1,3 +1,4 @@
+<!-- The body and head are the same as before -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,20 +30,26 @@
             </div>
         </section>
 
-        <!-- New Earnings Tracker Section -->
-        <div id="earnings-tracker" class="fade-in">
-            <label for="person-select">Amount earned by</label>
-            <select id="person-select">
-                <option value="bezos">Jeff Bezos</option>
-                <option value="musk">Elon Musk</option>
-                <option value="trump">Donald Trump</option>
-                <option value="page">Larry Page</option>
-                <option value="arnault">Bernard Arnault</option>
-                <option value="zuckerberg">Mark Zuckerberg</option>
-                <option value="gates">Bill Gates</option>
-            </select>
-            <span>since you've been here:</span>
-            <p id="earnings-display">$0.00</p>
+        <!-- Earnings Tracker Structure -->
+        <div id="earnings-widget">
+            <div class="widget-content">
+                <div class="widget-line-1">
+                    <span>Earned by</span>
+                    <select id="person-select">
+                        <option value="bezos">Jeff Bezos</option>
+                        <option value="musk">Elon Musk</option>
+                        <option value="trump">Donald Trump</option>
+                        <option value="page">Larry Page</option>
+                        <option value="arnault">Bernard Arnault</option>
+                        <option value="zuckerberg">Mark Zuckerberg</option>
+                        <option value="gates">Bill Gates</option>
+                    </select>
+                </div>
+                <div class="widget-line-2">
+                    <span id="earnings-display">$0.00</span>
+                    <span class="subtext">since you've been here</span>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -50,7 +57,6 @@
         <p>© 2025 Dennis Heba.</p>
     </footer>
 
-    <!-- Link to the new JavaScript file -->
-    <script src="script.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>
