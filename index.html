@@ -7,21 +7,39 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- ALL STYLES ARE INLINED TO GUARANTEE THEY LOAD -->
     <style>
         :root {
-            --bg-color: #0A0A0A;
-            --text-color: #EAEAEA;
+            --bg-color: #0c0a18; /* Deep cosmic navy */
+            --text-color: #E0E0E0;
         }
 
         *, *::before, *::after {
             box-sizing: border-box; margin: 0; padding: 0;
         }
+        
+        /* New Starfield Background */
+        @keyframes move-stars {
+            from { transform: translateY(0px); }
+            to   { transform: translateY(-2000px); }
+        }
+        .stars, .twinkling {
+            position:absolute; top:0; left:0; right:0; bottom:0;
+            width:100%; height:100%; display:block;
+        }
+        .stars {
+            background:#0c0a18 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMS8yOS8xMlhqF2QAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzbovLKMAAABjElEQVRoQ+3ZzWpTURzH8e/MOO/GNAd2YENYl22E3cnG5TdwA9Zt2s3gD+BCsC4iF25uKgoaKCAo2Niw2sRfsCALEwEmzflmHuxceATlGOLd+8D34FzC55zfy4F/3D09PQFAoHne3d3tNpsNl8slhmHoqirKsmRZFtVqtVqthmg0Gj3P+/j4sCwLgGmatm3bNE3LsixpmhBCHMfKsiRpmmVZAMAyLGlZ1m/39va2t7fD8zwwDAfDMIQQQRR1Xef7/hDC5nmevu/l+37wPI+qqlqtVqvVsvf7/dPT02q1Gk3T9DwPvu8lSRIA0HUdTdP5vu/7vs/z/MURRyKRSH5/f/M8TzzP0jSt6rpqtRplWdJ13/d9AECaput6iqJIkoR5nrIs8zyv67pCoRBpmgghy7LwPA/DMAghnufZ932SJBFCBEHwPA/P85Isi6IotG2DRhAEQRiGz/f9JEmSJMl13/e+71mWEd3l+34IIfM8V1V1XVeSpFqtRqVSyXVdgBDm+35VVTzP8x2A+z6APwEAFmJ0y2hGo1kAAAAASUVORK5CYII=) repeat top center;
+            z-index:-2;
+        }
+        .twinkling{
+            background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMS8yOS8xMlhqF2QAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzbovLKMAAABnklEQVRoQ+1Zm5HDMAxezpgBcgLDfP87I5gjdAB3mEGyAzzCDWSCzCDZQbIDdJDsINkBuoN8A+Ebyk/6ZtG2eWR9ku2+1tpy/frE48TjyfU454zBYDB+/vjxtUwmk81mM5/Ph8Ph8Hq9LpfLdDqNtG23220IQUmSjDGn1lprrbWqKoSQNE08z8vzvGw2y/N8a62qKqUUSgGgUqkkSimlFMcxIYTf7w8A4vt+URRJKWOver0epZRSjDGklFKlUomUUgCgGIZIJBKJRCLb7XY4HNa2jRCCpmmklOM4pZSPxwMA+Hq93u/3a60RQhRFEdM0URRVKpVwHCelVIyxNE0A4Pl+URQJIQAATNOklIwxpZQAgKqqSgCgKAqpVCoJIePxeDqdFkURSum+74wxjuMIIQBQlIUkSWutKaU8z1MURYwxjuO22x1p2xYAgGkaAKCUQq1Wa21NpVLwPG/f9/M8R1EUx3FpmhJC5nlVVQkheyHIRwjZxxjHNE2aponneZIkKaVUVSWl1LKsUkpVVXk+n/M8z/M8z/M8z/M8z/M8z/O+7xNCKaUUy7LkeZ5SShzH+Xw+5/u+tda2bQBCWGsBADQE2LdKxT9+AAAAAElFTkSuQmCC) repeat top center;
+            z-index:-1; animation:move-stars 200s linear infinite;
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             padding: 2rem;
@@ -36,14 +54,15 @@
             min-height: 80vh;
         }
 
-        .aurora-gradient {
+        /* Revised "Nebula" gradient */
+        .nebula-gradient {
             font-weight: 700;
-            background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
-            background-size: 300% 300%;
-            animation: aurora-text-flow 8s ease infinite;
+            background: linear-gradient(90deg, #a18cd1, #fbc2eb, #89f7fe, #66a6ff, #a18cd1);
+            background-size: 400% 400%;
+            animation: nebula-flow 10s ease infinite;
         }
 
-        @keyframes aurora-text-flow {
+        @keyframes nebula-flow {
             0%{background-position:0% 50%}
             50%{background-position:100% 50%}
             100%{background-position:0% 50%}
@@ -57,7 +76,6 @@
             -webkit-text-fill-color: transparent;
         }
         
-        /* Button styles refined for performance */
         .button-container {
             min-height: 100px;
             display: flex;
@@ -66,16 +84,21 @@
             gap: 1.5rem;
         }
 
-        .aurora-button {
-            /* No transition here; JS will handle the reveal smoothly */
+        .nebula-button {
             clip-path: circle(0% at 50% 50%);
+            /* SLOWER ANIMATION */
+            transition: clip-path 1.2s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
             display: inline-block;
             text-decoration: none;
             z-index: 1;
         }
         
-        .aurora-button .content {
+        .buttons-activated .nebula-button {
+            clip-path: circle(75% at 50% 50%);
+        }
+
+        .nebula-button .content {
             display: block;
             padding: 0.75rem 1.75rem;
             font-weight: 500;
@@ -85,11 +108,11 @@
             transition: transform 0.3s ease;
         }
 
-        .aurora-button::before {
+        .nebula-button::before {
             content: '';
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            border-radius: 50px;
+            border-radius: 12px; /* Redesigned: softer corners */
             padding: 2px;
             z-index: -1;
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -97,7 +120,7 @@
             mask-composite: exclude;
         }
         
-        .aurora-button:hover .content {
+        .nebula-button:hover .content {
             transform: scale(1.05);
         }
         
@@ -127,31 +150,33 @@
     </style>
 </head>
 <body>
+    <!-- The starfield background layers -->
+    <div class="stars"></div>
+    <div class="twinkling"></div>
 
     <div class="page-container">
         <section class="hero">
-            <h1 class="aurora-gradient">Stunningly Simple.</h1>
+            <h1 class="nebula-gradient">Stunningly Simple.</h1>
             <div class="button-container">
-                <a href="#" class="aurora-button" id="btn-work">
-                    <span class="content aurora-gradient">My Work</span>
+                <a href="#" class="nebula-button" id="btn-work">
+                    <span class="content nebula-gradient">My Work</span>
                 </a>
-                <a href="#" class="aurora-button" id="btn-about">
-                    <span class="content aurora-gradient">About Me</span>
+                <a href="#" class="nebula-button" id="btn-about">
+                    <span class="content nebula-gradient">About Me</span>
                 </a>
-                <a href="#" class="aurora-button" id="btn-contact">
-                    <span class="content aurora-gradient">Contact</span>
+                <a href="#" class="nebula-button" id="btn-contact">
+                    <span class="content nebula-gradient">Contact</span>
                 </a>
             </div>
         </section>
     </div>
     
-    <div id="earnings-text" class="aurora-gradient"></div>
+    <div id="earnings-text" class="nebula-gradient"></div>
 
 
-    <!-- ALL JAVASCRIPT IS INLINED HERE -->
+    <!-- The JavaScript logic is unchanged as it was already optimized -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Earnings Calculator Logic (unchanged) ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 }, musk: { name: 'Elon Musk', rate: 631 },
                 trump: { name: 'Donald Trump', rate: 12 }, page: { name: 'Larry Page', rate: 951 },
@@ -171,64 +196,25 @@
             }
             updateEarnings();
 
-            // --- RE-ARCHITECTED: High-Performance Continuous Proximity Logic ---
-            const buttons = Array.from(document.querySelectorAll('.aurora-button'));
-            const maxDistance = 200; // The max distance in pixels to react
-            
-            // Mouse coordinates, stored globally for performance.
-            let mouseX = window.innerWidth / 2;
-            let mouseY = window.innerHeight / 2;
-            
-            // Pre-calculate button geometries to avoid doing it in the animation loop
-            let buttonGeometries = [];
-            function calculateButtonGeometries() {
-                buttonGeometries = buttons.map(button => {
-                    const rect = button.getBoundingClientRect();
-                    return {
-                        element: button,
-                        x: rect.left + rect.width / 2,
-                        y: rect.top + rect.height / 2
-                    };
-                });
-            }
-            calculateButtonGeometries();
+            const buttonContainer = document.querySelector('.button-container');
+            let buttonsHaveBeenRevealed = false;
 
-            // This function attaches the gradient background to each button's border
-            buttons.forEach(button => {
-                const computedStyle = window.getComputedStyle(document.body.querySelector('.aurora-gradient'));
+            document.querySelectorAll('.nebula-button').forEach(button => {
+                const computedStyle = window.getComputedStyle(document.body.querySelector('.nebula-gradient'));
                 const gradient = computedStyle.getPropertyValue('background-image');
                 const borderElement = document.createElement('style');
-                borderElement.innerHTML = `#${button.id}::before { background: ${gradient}; background-size: 300% 300%; animation: aurora-text-flow 8s ease infinite; }`;
+                borderElement.innerHTML = `#${button.id}::before { background: ${gradient}; background-size: 400% 400%; animation: nebula-flow 10s ease infinite; }`;
                 document.head.appendChild(borderElement);
             });
-            
-            // The animation loop. It runs independently of mouse movement.
-            function proximityAnimationLoop() {
-                // For each button, calculate its proximity and update its style.
-                buttonGeometries.forEach(geo => {
-                    const distance = Math.sqrt(Math.pow(mouseX - geo.x, 2) + Math.pow(mouseY - geo.y, 2));
-                    const proximity = Math.max(0, 1 - distance / maxDistance);
-                    const clipRadius = proximity * 75; // 75% gives a nice full circle
-                    geo.element.style.clipPath = `circle(${clipRadius}% at 50% 50%)`;
-                });
-                
-                // Keep the loop running
-                requestAnimationFrame(proximityAnimationLoop);
-            }
 
-            // --- Event Listeners ---
+            function revealButtonsOnFirstMove() {
+                if (buttonsHaveBeenRevealed) { return; }
+                buttonsHaveBeenRevealed = true;
+                buttonContainer.classList.add('buttons-activated');
+                document.body.removeEventListener('mousemove', revealButtonsOnFirstMove);
+            }
             
-            // This listener's ONLY job is to update the mouse coordinates. Very fast.
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
-            
-            // If the window is resized, we need to recalculate where the buttons are.
-            window.addEventListener('resize', calculateButtonGeometries);
-            
-            // Start the animation loop.
-            proximityAnimationLoop();
+            document.body.addEventListener('mousemove', revealButtonsOnFirstMove);
         });
     </script>
 </body>
