@@ -1,38 +1,18 @@
-<!-- The DOCTYPE declaration defines the document type to be HTML5 -->
 <!DOCTYPE html>
-<!-- The <html> element is the root element of an HTML page. 'lang="en"' specifies the language is English. -->
 <html lang="en">
-
-<!-- The <head> element contains meta-information about the HTML document -->
 <head>
-    <!-- 'charset="UTF-8"' sets the character set to UTF-8 to support most characters and symbols -->
     <meta charset="UTF-8">
-    <!-- The viewport meta tag ensures the site is responsive and displays correctly on all devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- The <title> tag specifies the title for the browser tab -->
     <title>Dennis Heba | Welcome</title>
-
-    <!-- This links to Google Fonts to import the 'Poppins' font for a modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <!-- This links the external stylesheet. The './' ensures it looks in the current directory. -->
     <link rel="stylesheet" href="./style.css">
 </head>
-
-<!-- The <body> element defines the document's body, which contains all the visible contents -->
 <body>
 
-    <!-- The <header> element represents a container for introductory content or a set of navigational links. -->
     <header class="main-header">
-        <!-- The <nav> element defines a set of navigation links. -->
         <nav class="main-nav">
-            <!-- This div holds the logo or site title. -->
             <div class="logo">Dennis Heba</div>
-            <!-- 'ul' stands for unordered list, used here for the navigation menu. -->
             <ul>
-                <!-- Each 'li' is a list item, and each 'a' (anchor) tag is a link. -->
-                <!-- The 'active' class is used to highlight the current page in the navigation. -->
                 <li><a href="./index.html" class="active">Home</a></li>
                 <li><a href="./contact.html">Contact</a></li>
                 <li><a href="./privacy.html">Privacy Policy</a></li>
@@ -40,25 +20,37 @@
         </nav>
     </header>
 
-    <!-- The <main> element specifies the main content of a document. -->
     <main>
-        <!-- The <section> element defines a section in a document. The 'hero' is the main banner. -->
         <section class="hero">
-            <div class="hero-content">
-                <!-- 'h1' is the main heading for the page. -->
+            <div class="hero-content fade-in">
                 <h1>Stunningly Simple.</h1>
-                <!-- 'p' is a paragraph tag. The 'subtitle' class provides specific styling. -->
                 <p class="subtitle">A clean and modern website built with HTML & CSS.</p>
-                <!-- This anchor tag is styled as a button using the 'btn' class. -->
                 <a href="./contact.html" class="btn">Get In Touch</a>
             </div>
         </section>
+
+        <!-- New Earnings Tracker Section -->
+        <div id="earnings-tracker" class="fade-in">
+            <label for="person-select">Amount earned by</label>
+            <select id="person-select">
+                <option value="bezos">Jeff Bezos</option>
+                <option value="musk">Elon Musk</option>
+                <option value="trump">Donald Trump</option>
+                <option value="page">Larry Page</option>
+                <option value="arnault">Bernard Arnault</option>
+                <option value="zuckerberg">Mark Zuckerberg</option>
+                <option value="gates">Bill Gates</option>
+            </select>
+            <span>since you've been here:</span>
+            <p id="earnings-display">$0.00</p>
+        </div>
     </main>
 
-    <!-- The <footer> element defines a footer for the document or a section. -->
     <footer class="main-footer">
         <p>© 2025 Dennis Heba.</p>
     </footer>
 
+    <!-- Link to the new JavaScript file -->
+    <script src="script.js"></script>
 </body>
 </html>
