@@ -20,7 +20,11 @@
             box-sizing: border-box; margin: 0; padding: 0;
         }
 
-        html, body {
+        html {
+            height: 100%;
+        }
+
+        body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -28,32 +32,48 @@
             height: 100%;
         }
         
+        /* NEW: SVG Starfield Background */
         #starfield-background {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
             background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
         }
-        #starfield-background svg { position: absolute; top: 0; left: 0; }
+
+        #starfield-background svg {
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        /* Animation for each layer of stars */
         #stars1 { animation: animate-stars 150s linear infinite; }
         #stars2 { animation: animate-stars 100s linear infinite; }
         #stars3 { animation: animate-stars 50s linear infinite; }
+        
         @keyframes animate-stars {
-            from { transform: translateY(0px); } to { transform: translateY(-2000px); }
+            from { transform: translateY(0px); }
+            to   { transform: translateY(-2000px); }
         }
 
+        /* Page Layout: Unchanged */
         .page-container {
-            display: flex; align-items: center; height: 100%; padding: 2rem;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 2rem;
         }
         
-        .content-wrapper { max-width: 800px; text-align: left; }
+        .content-wrapper {
+            max-width: 800px;
+            text-align: left;
+        }
 
-        .aurora-gradient-text {
+        .aurora-gradient {
             font-weight: 700;
             background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
             background-size: 300% 300%;
             animation: aurora-text-flow 8s ease infinite;
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         @keyframes aurora-text-flow {
@@ -62,11 +82,26 @@
             100%{background-position:0% 50%}
         }
         
-        .hero h1 { font-size: 5rem; margin-bottom: 2rem; }
+        .hero h1 {
+            font-size: 5rem;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         
-        .button-container { display: flex; gap: 1.5rem; min-height: 50px; }
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 1.5rem;
+        }
 
-        /* RE-ENGINEERED BUTTON STYLES */
         .aurora-button {
             clip-path: circle(0% at 50% 50%);
             transition: clip-path 0.8s cubic-bezier(0.25, 1, 0.5, 1);
@@ -80,50 +115,38 @@
             clip-path: circle(75% at 50% 50%);
         }
 
-        /* The pseudo-element IS the gradient border */
-        .aurora-button::before {
-            content: '';
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%;
-            border-radius: 50px;
-            padding: 2px; /* Border thickness */
-            background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
-            background-size: 300% 300%;
-            animation: aurora-text-flow 8s ease infinite;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-        }
-        
-        /* The content with a solid background and text color */
         .aurora-button .content {
-            display: block;
-            padding: 0.75rem 1.75rem;
-            font-weight: 500;
-            color: var(--text-color); /* Solid white text */
-            background: var(--bg-color); /* Solid dark background */
-            border-radius: 50px;
-            transition: color 0.3s ease, background-color 0.3s ease;
+            display: block; padding: 0.75rem 1.75rem; font-weight: 500;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
+        }
+
+        .aurora-button::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; border-radius: 50px;
+            padding: 2px; z-index: -1;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
         }
         
-        /* The refined hover effect */
         .aurora-button:hover .content {
-            background-color: rgba(255, 255, 255, 0.9); /* Fill with semi-transparent white */
-            color: #0A0A0A; /* Text becomes dark */
+            transform: scale(1.05);
         }
         
         #earnings-text {
             position: fixed; bottom: 1.5rem; left: 1.5rem;
             font-size: 0.9rem; font-weight: 500;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-            transition-delay: 0.2s;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0; animation: fade-in-up 1s ease 0.5s forwards;
         }
 
-        #earnings-text.is-active { opacity: 1; transform: translateY(0); }
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         @media (max-width: 600px) {
             .hero h1 { font-size: 3.5rem; }
@@ -137,6 +160,7 @@
 </head>
 <body>
     
+    <!-- The new SVG background replaces the old div-based one -->
     <div id="starfield-background">
         <svg id="stars1" width="100%" height="200%" preserveAspectRatio="none"></svg>
         <svg id="stars2" width="100%" height="200%" preserveAspectRatio="none"></svg>
@@ -146,48 +170,58 @@
     <div class="page-container">
         <div class="content-wrapper">
             <section class="hero">
-                <h1 class="aurora-gradient-text">Stunningly Simple.</h1>
+                <h1 class="aurora-gradient">Stunningly Simple.</h1>
+                <p>A modern, interactive landing page designed for engagement. Move your mouse to reveal the navigation.</p>
             </section>
             <div class="button-container">
                 <a href="#" class="aurora-button" id="btn-work">
-                    <span class="content">My Work</span>
+                    <span class="content aurora-gradient">My Work</span>
                 </a>
                 <a href="#" class="aurora-button" id="btn-about">
-                    <span class="content">About Me</span>
+                    <span class="content aurora-gradient">About Me</span>
                 </a>
                 <a href="#" class="aurora-button" id="btn-contact">
-                    <span class="content">Contact</span>
+                    <span class="content aurora-gradient">Contact</span>
                 </a>
             </div>
         </div>
     </div>
     
-    <div id="earnings-text" class="aurora-gradient-text"></div>
+    <div id="earnings-text" class="aurora-gradient"></div>
 
 
-    <!-- The JavaScript remains the same, as the changes were purely CSS -->
+    <!-- The JavaScript is updated to generate the SVG stars -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Star Generation Logic ---
+            // --- NEW: SVG Star Generation Logic ---
             function generateStars(svgId, count, minSize, maxSize) {
                 const svg = document.getElementById(svgId);
                 const width = window.innerWidth;
-                const height = 2000;
+                const height = 2000; // Generate stars over a taller area for animation
                 const ns = "http://www.w3.org/2000/svg";
+
                 for(let i = 0; i < count; i++) {
                     const star = document.createElementNS(ns, 'circle');
-                    const x = Math.random() * width; const y = Math.random() * height;
+                    const x = Math.random() * width;
+                    const y = Math.random() * height;
                     const r = Math.random() * (maxSize - minSize) + minSize;
-                    const opacity = Math.random() * 0.5 + 0.5;
-                    star.setAttribute('cx', x); star.setAttribute('cy', y);
-                    star.setAttribute('r', r); star.setAttribute('fill', 'white');
-                    star.setAttribute('opacity', opacity); svg.appendChild(star);
+                    const opacity = Math.random() * 0.5 + 0.5; // Random opacity for twinkling effect
+
+                    star.setAttribute('cx', x);
+                    star.setAttribute('cy', y);
+                    star.setAttribute('r', r);
+                    star.setAttribute('fill', 'white');
+                    star.setAttribute('opacity', opacity);
+                    svg.appendChild(star);
                 }
             }
-            generateStars('stars1', 200, 0.5, 1); generateStars('stars2', 150, 0.5, 1.2);
+            
+            // Generate three layers of stars with different properties
+            generateStars('stars1', 200, 0.5, 1);
+            generateStars('stars2', 150, 0.5, 1.2);
             generateStars('stars3', 100, 0.5, 1.5);
 
-            // --- Earnings Calculator Logic ---
+            // --- Earnings Calculator Logic (unchanged) ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 }, musk: { name: 'Elon Musk', rate: 631 },
                 trump: { name: 'Donald Trump', rate: 12 }, page: { name: 'Larry Page', rate: 951 },
@@ -207,19 +241,26 @@
             }
             updateEarnings();
 
-            // --- Reveal Logic ---
+            // --- Button Reveal Logic (unchanged) ---
             const buttonContainer = document.querySelector('.button-container');
-            let hasBeenRevealed = false;
+            let buttonsHaveBeenRevealed = false;
 
-            function revealElementsOnFirstMove() {
-                if (hasBeenRevealed) { return; }
-                hasBeenRevealed = true;
+            document.querySelectorAll('.aurora-button').forEach(button => {
+                const computedStyle = window.getComputedStyle(document.body.querySelector('.aurora-gradient'));
+                const gradient = computedStyle.getPropertyValue('background-image');
+                const borderElement = document.createElement('style');
+                borderElement.innerHTML = `#${button.id}::before { background: ${gradient}; background-size: 300% 300%; animation: aurora-text-flow 8s ease infinite; }`;
+                document.head.appendChild(borderElement);
+            });
+
+            function revealButtonsOnFirstMove() {
+                if (buttonsHaveBeenRevealed) { return; }
+                buttonsHaveBeenRevealed = true;
                 buttonContainer.classList.add('buttons-activated');
-                earningsTextElement.classList.add('is-active');
-                document.body.removeEventListener('mousemove', revealElementsOnFirstMove);
+                document.body.removeEventListener('mousemove', revealButtonsOnFirstMove);
             }
             
-            document.body.addEventListener('mousemove', revealElementsOnFirstMove);
+            document.body.addEventListener('mousemove', revealButtonsOnFirstMove);
         });
     </script>
 </body>
