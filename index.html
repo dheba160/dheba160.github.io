@@ -25,7 +25,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             padding: 2rem;
-            overflow: hidden; /* Prevents scrollbars from flash-appearing */
+            overflow: hidden;
         }
         
         .page-container {
@@ -36,28 +36,29 @@
             min-height: 80vh;
         }
 
-        .gradient-text {
+        /* Unified gradient style for all key elements */
+        .aurora-gradient {
             font-weight: 700;
             background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
             background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: aurora-text 8s ease infinite;
+            animation: aurora-text-flow 8s ease infinite;
         }
 
-        @keyframes aurora-text {
+        @keyframes aurora-text-flow {
             0%{background-position:0% 50%}
             50%{background-position:100% 50%}
             100%{background-position:0% 50%}
         }
-
+        
         .hero h1 {
             font-size: 5rem;
-            margin-bottom: 2rem; 
+            margin-bottom: 2rem;
+            -webkit-background-clip: text; /* Apply gradient to text */
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        /* --------- Proximity Buttons --------- */
+        /* --------- Proximity Buttons Redesigned --------- */
         .button-container {
             min-height: 100px;
             display: flex;
@@ -66,80 +67,57 @@
             gap: 1.5rem;
         }
 
-        .outline-btn {
-            /* Initial state: invisible and ready for JS control */
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-
+        .aurora-button {
+            /* Initial state: Clipped and invisible */
+            clip-path: circle(0% at 50% 50%);
+            transition: clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth "pop" animation */
+            
             position: relative;
             display: inline-block;
-            padding: 0.75rem 1.75rem;
-            border-radius: 50px;
-            color: var(--text-color);
             text-decoration: none;
-            font-weight: 500;
-            background-color: var(--bg-color); /* Match page background */
             z-index: 1;
         }
-
-        /* Gradient border created using a pseudo-element */
-        .outline-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px;
-            width: calc(100% + 4px);
-            height: calc(100% + 4px);
-            border-radius: 50px;
-            z-index: -1;
-            transition: opacity 0.4s ease;
-        }
         
-        /* Unique Gradients for each button's border */
-        .outline-btn.gradient-1::before {
-            background: linear-gradient(90deg, #84fab0, #8fd3f4);
-        }
-        .outline-btn.gradient-2::before {
-            background: linear-gradient(90deg, #a18cd1, #fbc2eb);
-        }
-        .outline-btn.gradient-3::before {
-            background: linear-gradient(90deg, #ff8581, #ffc085);
+        /* The visible text part of the button */
+        .aurora-button .content {
+            display: block;
+            padding: 0.75rem 1.75rem;
+            font-weight: 500;
+            -webkit-background-clip: text; /* Apply gradient to text */
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
         }
 
-        /* Fill animation on direct hover */
-        .outline-btn:hover {
-            color: #0A0A0A; /* Dark text for contrast against the fill */
-            transform: scale(1.05) !important; /* !important to override JS scaling */
-        }
-        
-        .outline-btn:hover::before {
-            opacity: 1 !important; /* Ensure border is fully visible on hover */
-        }
-        
-        .outline-btn::after {
+        /* The gradient border, created using a pseudo-element behind the content */
+        .aurora-button::before {
             content: '';
             position: absolute;
             top: 0; left: 0;
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             border-radius: 50px;
+            padding: 2px; /* This padding creates the border thickness */
             z-index: -1;
-            transform: scaleX(0); /* Start with zero width */
-            transform-origin: left;
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            -webkit-mask: /* The magic: A solid color with a hole in the middle */
+                 linear-gradient(#fff 0 0) content-box, 
+                 linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
         }
         
-        .outline-btn.gradient-1::after { background: linear-gradient(90deg, #84fab0, #8fd3f4); }
-        .outline-btn.gradient-2::after { background: linear-gradient(90deg, #a18cd1, #fbc2eb); }
-        .outline-btn.gradient-3::after { background: linear-gradient(90deg, #ff8581, #ffc085); }
-        
-        .outline-btn:hover::after {
-            transform: scaleX(1); /* Fill the button */
+        /* Hover state: intensifies the effect */
+        .aurora-button:hover .content {
+            transform: scale(1.05);
         }
-
+        
         #earnings-text {
             position: fixed; bottom: 1.5rem; left: 1.5rem;
             font-size: 0.9rem; font-weight: 500;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
             opacity: 0; animation: fade-in-up 1s ease 0.5s forwards;
         }
 
@@ -151,7 +129,10 @@
         @media (max-width: 600px) {
             .hero h1 { font-size: 3rem; }
             .button-container { flex-direction: column; }
-            #earnings-text { font-size: 0.8rem; left: 1rem; right: 1rem; text-align: center; bottom: 1rem; }
+            #earnings-text { 
+                font-size: 0.8rem; left: 1rem; right: 1rem;
+                text-align: center; bottom: 1rem;
+            }
         }
     </style>
 </head>
@@ -159,16 +140,22 @@
 
     <div class="page-container">
         <section class="hero">
-            <h1 class="gradient-text">Stunningly Simple.</h1>
+            <h1 class="aurora-gradient">Stunningly Simple.</h1>
             <div class="button-container">
-                <a href="#" class="outline-btn gradient-1" id="btn-work">My Work</a>
-                <a href="#" class="outline-btn gradient-2" id="btn-about">About Me</a>
-                <a href="#" class="outline-btn gradient-3" id="btn-contact">Contact</a>
+                <a href="#" class="aurora-button" id="btn-work">
+                    <span class="content aurora-gradient">My Work</span>
+                </a>
+                <a href="#" class="aurora-button" id="btn-about">
+                    <span class="content aurora-gradient">About Me</span>
+                </a>
+                <a href="#" class="aurora-button" id="btn-contact">
+                    <span class="content aurora-gradient">Contact</span>
+                </a>
             </div>
         </section>
     </div>
     
-    <div id="earnings-text" class="gradient-text"></div>
+    <div id="earnings-text" class="aurora-gradient"></div>
 
 
     <!-- ALL JAVASCRIPT IS INLINED HERE -->
@@ -195,33 +182,43 @@
             updateEarnings();
 
 
-            // --- NEW: Proximity Button Logic ---
-            const buttons = document.querySelectorAll('.outline-btn');
-            const maxDistance = 250; // The maximum distance in pixels to react to the mouse
+            // --- REFINED: Proximity "Pop-Up" Button Logic ---
+            const buttons = document.querySelectorAll('.aurora-button');
+            // The trigger distance is now much smaller for a more refined feel
+            const maxDistance = 150; 
+
+            // This function attaches the gradient background to the ::before pseudo-element
+            buttons.forEach(button => {
+                // Get the computed style of the shared gradient from the body
+                const computedStyle = window.getComputedStyle(document.body.querySelector('.aurora-gradient'));
+                const gradient = computedStyle.getPropertyValue('background-image');
+                // Apply it to the button's border pseudo-element
+                const borderElement = document.createElement('style');
+                borderElement.innerHTML = `#${button.id}::before { background: ${gradient}; background-size: 300% 300%; animation: aurora-text-flow 8s ease infinite; }`;
+                document.head.appendChild(borderElement);
+            });
 
             function handleMouseMove(event) {
                 const mouseX = event.clientX;
                 const mouseY = event.clientY;
 
                 buttons.forEach(button => {
-                    // Get the position and size of the button
                     const rect = button.getBoundingClientRect();
                     const buttonX = rect.left + rect.width / 2;
                     const buttonY = rect.top + rect.height / 2;
 
-                    // Calculate the distance between the mouse and the button's center
                     const distance = Math.sqrt(Math.pow(mouseX - buttonX, 2) + Math.pow(mouseY - buttonY, 2));
-
-                    // Calculate a proximity factor (0 to 1), where 1 is closest
+                    
+                    // Proximity is now a simple 0 or 1, but could be made smoother
                     const proximity = Math.max(0, 1 - distance / maxDistance);
 
-                    // Apply the effect. Squaring the proximity makes the effect more dramatic.
-                    button.style.opacity = proximity * proximity;
-                    button.style.transform = `scale(${0.95 + (0.05 * proximity)})`; // Subtle scale up
+                    // This calculation creates the "pop-up" effect.
+                    // The clip-path radius grows from 0% to 150% based on proximity.
+                    const clipRadius = proximity * 150; 
+                    button.style.clipPath = `circle(${clipRadius}% at 50% 50%)`;
                 });
             }
             
-            // Listen for mouse movement on the whole window
             window.addEventListener('mousemove', handleMouseMove);
         });
     </script>
