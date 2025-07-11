@@ -32,7 +32,6 @@
             height: 100%;
         }
         
-        /* NEW: SVG Starfield Background */
         #starfield-background {
             position: fixed;
             top: 0; left: 0;
@@ -46,7 +45,6 @@
             top: 0; left: 0;
         }
 
-        /* Animation for each layer of stars */
         #stars1 { animation: animate-stars 150s linear infinite; }
         #stars2 { animation: animate-stars 100s linear infinite; }
         #stars3 { animation: animate-stars 50s linear infinite; }
@@ -56,7 +54,6 @@
             to   { transform: translateY(-2000px); }
         }
 
-        /* Page Layout: Unchanged */
         .page-container {
             display: flex;
             align-items: center;
@@ -160,7 +157,6 @@
 </head>
 <body>
     
-    <!-- The new SVG background replaces the old div-based one -->
     <div id="starfield-background">
         <svg id="stars1" width="100%" height="200%" preserveAspectRatio="none"></svg>
         <svg id="stars2" width="100%" height="200%" preserveAspectRatio="none"></svg>
@@ -174,13 +170,14 @@
                 <p>A modern, interactive landing page designed for engagement. Move your mouse to reveal the navigation.</p>
             </section>
             <div class="button-container">
-                <a href="#" class="aurora-button" id="btn-work">
+                <!-- UPDATED: href attributes are now added -->
+                <a href="#work" class="aurora-button" id="btn-work">
                     <span class="content aurora-gradient">My Work</span>
                 </a>
-                <a href="#" class="aurora-button" id="btn-about">
+                <a href="#about" class="aurora-button" id="btn-about">
                     <span class="content aurora-gradient">About Me</span>
                 </a>
-                <a href="#" class="aurora-button" id="btn-contact">
+                <a href="#contact" class="aurora-button" id="btn-contact">
                     <span class="content aurora-gradient">Contact</span>
                 </a>
             </div>
@@ -190,14 +187,13 @@
     <div id="earnings-text" class="aurora-gradient"></div>
 
 
-    <!-- The JavaScript is updated to generate the SVG stars -->
+    <!-- The JavaScript is unchanged -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- NEW: SVG Star Generation Logic ---
             function generateStars(svgId, count, minSize, maxSize) {
                 const svg = document.getElementById(svgId);
                 const width = window.innerWidth;
-                const height = 2000; // Generate stars over a taller area for animation
+                const height = 2000;
                 const ns = "http://www.w3.org/2000/svg";
 
                 for(let i = 0; i < count; i++) {
@@ -205,7 +201,7 @@
                     const x = Math.random() * width;
                     const y = Math.random() * height;
                     const r = Math.random() * (maxSize - minSize) + minSize;
-                    const opacity = Math.random() * 0.5 + 0.5; // Random opacity for twinkling effect
+                    const opacity = Math.random() * 0.5 + 0.5;
 
                     star.setAttribute('cx', x);
                     star.setAttribute('cy', y);
@@ -216,12 +212,10 @@
                 }
             }
             
-            // Generate three layers of stars with different properties
             generateStars('stars1', 200, 0.5, 1);
             generateStars('stars2', 150, 0.5, 1.2);
             generateStars('stars3', 100, 0.5, 1.5);
 
-            // --- Earnings Calculator Logic (unchanged) ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 }, musk: { name: 'Elon Musk', rate: 631 },
                 trump: { name: 'Donald Trump', rate: 12 }, page: { name: 'Larry Page', rate: 951 },
@@ -241,7 +235,6 @@
             }
             updateEarnings();
 
-            // --- Button Reveal Logic (unchanged) ---
             const buttonContainer = document.querySelector('.button-container');
             let buttonsHaveBeenRevealed = false;
 
