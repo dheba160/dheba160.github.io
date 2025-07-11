@@ -1,4 +1,4 @@
-<!-- The body and head are the same as before -->
+<!-- The <head> and page structure remain the same -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dennis Heba | Welcome</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet"> <!-- Added Mono font for clock -->
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -30,7 +31,7 @@
             </div>
         </section>
 
-        <!-- Earnings Tracker Structure -->
+        <!-- Earnings Widget - The JS will build the clock inside #earnings-display -->
         <div id="earnings-widget">
             <div class="widget-content">
                 <div class="widget-line-1">
@@ -45,10 +46,8 @@
                         <option value="gates">Bill Gates</option>
                     </select>
                 </div>
-                <div class="widget-line-2">
-                    <span id="earnings-display">$0.00</span>
-                    <span class="subtext">since you've been here</span>
-                </div>
+                <!-- This is now the container for our flip clock -->
+                <div id="earnings-display"></div>
             </div>
         </div>
     </main>
