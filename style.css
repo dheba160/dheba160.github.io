@@ -1,170 +1,154 @@
-/* --------- General Styles --------- */
-/* These rules apply to the entire website unless overridden. */
+/* Keep all the previous styles from body to the footer... */
 
-body {
-    font-family: 'Poppins', sans-serif; /* Sets the default font for the site. */
-    margin: 0; /* Removes the default margin around the body. */
-    background-color: #f4f4f4; /* A light gray background color for the page. */
-    color: #333; /* A dark gray for text, which is easy to read. */
-    line-height: 1.6; /* Sets the spacing between lines of text. */
+/* --------- Animations --------- */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 1.5s 0.2s forwards; /* Added a slight delay */
 }
 
-a {
-    text-decoration: none; /* Removes the underline from links. */
-    color: #007bff; /* A standard blue color for links. */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* --------- Header & Navigation --------- */
-
-.main-header {
-    background: #fff; /* A white background for the header. */
-    padding: 1rem 0; /* Adds padding on the top and bottom. */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* A subtle shadow to lift the header off the page. */
+/* --------- New Earnings Widget Styles --------- */
+#earnings-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+    backdrop-filter: blur(15px); /* The "glass" effect */
+    -webkit-backdrop-filter: blur(15px); /* For Safari compatibility */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    z-index: 1001;
+    color: #fff;
+    font-size: 14px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Ensures content respects the border-radius */
+    animation: fadeIn 1s 0.5s forwards; /* The widget also fades in */
+    opacity: 0;
 }
 
-.main-nav {
-    display: flex; /* Uses Flexbox to create a flexible layout. */
-    justify-content: space-between; /* Puts space between the logo and the nav links. */
-    align-items: center; /* Vertically aligns the items in the center. */
-    max-width: 1100px; /* Sets a maximum width for the content. */
-    margin: auto; /* Centers the navigation bar on the page. */
-    padding: 0 2rem; /* Adds padding on the left and right. */
+.widget-content {
+    padding: 15px 20px;
 }
 
-.main-nav .logo {
-    font-size: 1.5rem; /* Makes the logo text larger. */
-    font-weight: 600; /* Makes the logo font bold. */
+.widget-line-1, .widget-line-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.main-nav ul {
-    display: flex; /* Aligns the list items in a row. */
-    list-style: none; /* Removes the default bullet points from the list. */
-    padding: 0; /* Removes default padding. */
+.widget-line-1 {
+    margin-bottom: 10px;
 }
 
-.main-nav ul li {
-    margin-left: 20px; /* Adds space between the navigation items. */
+#earnings-widget span {
+    color: rgba(255, 255, 255, 0.8);
 }
 
-.main-nav ul li a {
-    color: #333; /* Sets the text color for navigation links. */
-    font-weight: 600; /* Makes the link text bold. */
-    padding-bottom: 5px; /* Adds space for the bottom border on hover. */
+#earnings-widget select {
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 10px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
 }
 
-/* This rule applies a border to the active page link or when hovering over a link. */
-.main-nav ul li a.active,
-.main-nav ul li a:hover {
-    border-bottom: 2px solid #007bff; /* Adds a blue underline effect. */
+#earnings-display {
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+    margin-right: 10px;
+    line-height: 1;
 }
 
-/* --------- Hero Section --------- */
-/* This is the large banner on the homepage. */
-
-.hero {
-    background: #2F4F4F; /* A dark slate gray background color. */
-    color: #fff; /* White text color for contrast. */
-    height: 80vh; /* Sets the height to 80% of the viewport height. */
-    display: flex; /* Uses Flexbox for centering content. */
-    justify-content: center; /* Horizontally centers the content. */
-    align-items: center; /* Vertically centers the content. */
-    text-align: center; /* Centers the text inside the hero section. */
+.widget-line-2 .subtext {
+    font-size: 12px;
+    font-weight: 300;
+    text-align: right;
 }
 
-.hero-content h1 {
-    font-size: 4rem; /* A large font size for the main headline. */
-    margin-bottom: 1rem; /* Adds space below the headline. */
-}
 
-.subtitle {
-    font-size: 1.5rem; /* A smaller font size for the subtitle. */
-    font-weight: 300; /* A lighter font weight. */
-}
-
-.btn {
-    display: inline-block; /* Allows setting padding and margin on the link. */
-    background: #007bff; /* Blue background color for the button. */
-    color: #fff; /* White text color. */
-    padding: 1rem 2rem; /* Adds padding inside the button. */
-    margin-top: 2rem; /* Adds space above the button. */
-    border-radius: 5px; /* Rounds the corners of the button. */
-    transition: background 0.3s; /* Smoothly animates the background color change on hover. */
-}
-
-.btn:hover {
-    background: #0056b3; /* A darker blue on hover to provide feedback. */
-}
-
-/* --------- Content Sections (Contact & Privacy) --------- */
-
-.contact-section, .privacy-section {
-    padding: 4rem 0; /* Adds significant vertical padding to create space. */
-    background: #fff; /* A white background to separate it from the body. */
-}
-
-.contact-container, .privacy-container {
-    max-width: 800px; /* A comfortable width for reading text content. */
-    margin: auto; /* Centers the container. */
-    padding: 0 2rem; /* Adds horizontal padding. */
-}
-
-.contact-section h2, .privacy-section h2 {
-    text-align: center; /* Centers the main heading of the section. */
-    margin-bottom: 2rem; /* Adds space below the heading. */
-    font-size: 2.5rem; /* A large font size for the section title. */
-}
-
-/* --------- Form Styles --------- */
-
-.contact-info {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 1.2rem;
-}
-
-.contact-form .form-group {
-    margin-bottom: 1.5rem; /* Adds space between each form field. */
-}
-
-.contact-form label {
-    display: block; /* Makes the label take up its own line. */
-    margin-bottom: .5rem; /* Adds space between the label and the input field. */
-}
-
-.contact-form input,
-.contact-form textarea {
-    width: 100%; /* Makes the input fields take up the full width of their container. */
-    padding: .8rem; /* Adds padding inside the fields. */
-    border: 1px solid #ddd; /* A light gray border. */
-    border-radius: 5px; /* Rounds the corners. */
-}
-
-/* --------- Footer --------- */
-
-.main-footer {
-    text-align: center; /* Centers the footer text. */
-    padding: 2rem; /* Adds padding to the footer. */
-    background: #333; /* A dark background for the footer. */
-    color: #fff; /* White text color. */
-}
-
-/* --------- Responsive Design --------- */
-/* This media query applies styles only on screens 768px or smaller (like tablets and phones). */
-
+/* --------- Responsive Design for the Widget --------- */
 @media(max-width: 768px) {
-    .main-nav {
-        flex-direction: column; /* Stacks the logo and navigation links vertically. */
+    #earnings-widget {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
     }
 
-    .main-nav ul {
-        margin-top: 1rem; /* Adds space between the logo and the nav links on small screens. */
+    #earnings-display {
+        font-size: 24px;
+    }
+}```
+
+---
+
+### **3. `script.js` (The New Animation Engine)**
+
+This script is completely rewritten to be smoother and maintain continuity.
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- Data and DOM Elements ---
+    const earningsPerSecond = {
+        bezos: 985,
+        musk: 631,
+        trump: 12,
+        page: 951,
+        arnault: 196,
+        zuckerberg: 469,
+        gates: 117
+    };
+    const personSelect = document.getElementById('person-select');
+    const earningsDisplay = document.getElementById('earnings-display');
+
+    // --- State and Timing Variables ---
+    let selectedPerson = 'bezos';
+    const startTime = Date.now(); // Record the exact time the page was loaded. This is the key to continuity.
+    let animationFrameId;
+
+    /**
+     * The main animation loop.
+     * This function runs on every frame the browser can render, making the animation super smooth.
+     */
+    function animateEarnings() {
+        // 1. Calculate total elapsed time since the page loaded.
+        const elapsedTimeInMs = Date.now() - startTime;
+        
+        // 2. Get the earnings rate for the currently selected person.
+        const ratePerSecond = earningsPerSecond[selectedPerson];
+        
+        // 3. Calculate the total earnings for the entire elapsed time.
+        const currentEarnings = (elapsedTimeInMs / 1000) * ratePerSecond;
+        
+        // 4. Update the display with a formatted currency string.
+        earningsDisplay.textContent = `$${currentEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
+        // 5. Request the next animation frame to continue the loop.
+        animationFrameId = requestAnimationFrame(animateEarnings);
     }
 
-    .hero-content h1 {
-        font-size: 2.5rem; /* Reduces the font size of the main headline for smaller screens. */
-    }
+    // --- Event Listener ---
+    // When the user selects a new person, just update the variable.
+    // The animation loop will automatically pick up the new rate on the next frame.
+    personSelect.addEventListener('change', (e) => {
+        selectedPerson = e.target.value;
+    });
 
-    .subtitle {
-        font-size: 1.2rem; /* Reduces the subtitle font size. */
-    }
-}
+    // --- Initial Call ---
+    // Start the animation loop.
+    animateEarnings();
+});
