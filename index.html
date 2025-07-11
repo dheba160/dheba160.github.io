@@ -32,44 +32,31 @@
             height: 100%;
         }
         
-        /* NEW: Animated Starfield Background */
+        /* NEW: SVG Starfield Background */
         #starfield-background {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
             background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
         }
 
-        /* Creates multiple layers of stars with different sizes and speeds */
-        .stars {
-            background: black;
-            width: 1px; height: 1px;
-            background: transparent;
-            box-shadow: 
-                -30vw 18vh 0px 0px #FFF, 2vw 42vh 0px 0px #FFF, 2vw 82vh 0px 1px #FFF,
-                82vw 83vh 1px 0px #FFF, 34vw 1vh 0px 1px #FFF, 1vw 68vh 0px 0px #FFF,
-                5vw 5vh 0px 0px #FFF, 89vw 9vh 1px 1px #FFF, 53vw 32vh 0px 0px #FFF,
-                /* ... add more stars for density */
-                9vw 3vh 1px 0px #FFF, 56vw 8vh 1px 1px #FFF, 9vw 90vh 0px 1px #FFF;
-            animation: space-travel 250s linear infinite;
+        #starfield-background svg {
+            position: absolute;
+            top: 0; left: 0;
         }
-        .stars::after {
-            content: " "; position: absolute; top: 2000px;
-            width: 1px; height: 1px; background: transparent;
-            box-shadow: inherit;
-        }
-        /* Further star layers */
-        .stars2 { animation-duration: 200s; }
-        .stars2::after { top: 2000px; }
-        .stars3 { animation-duration: 150s; }
-        .stars3::after { top: 2000px; }
+
+        /* Animation for each layer of stars */
+        #stars1 { animation: animate-stars 150s linear infinite; }
+        #stars2 { animation: animate-stars 100s linear infinite; }
+        #stars3 { animation: animate-stars 50s linear infinite; }
         
-        @keyframes space-travel {
+        @keyframes animate-stars {
             from { transform: translateY(0px); }
             to   { transform: translateY(-2000px); }
         }
 
-        /* Page Layout: Revised to be left-aligned */
+        /* Page Layout: Unchanged */
         .page-container {
             display: flex;
             align-items: center;
@@ -117,7 +104,6 @@
 
         .aurora-button {
             clip-path: circle(0% at 50% 50%);
-            /* SLOWER TRANSITION */
             transition: clip-path 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
             display: inline-block;
@@ -174,10 +160,11 @@
 </head>
 <body>
     
+    <!-- The new SVG background replaces the old div-based one -->
     <div id="starfield-background">
-        <div class="stars"></div>
-        <div class="stars stars2"></div>
-        <div class="stars stars3"></div>
+        <svg id="stars1" width="100%" height="200%" preserveAspectRatio="none"></svg>
+        <svg id="stars2" width="100%" height="200%" preserveAspectRatio="none"></svg>
+        <svg id="stars3" width="100%" height="200%" preserveAspectRatio="none"></svg>
     </div>
 
     <div class="page-container">
@@ -203,9 +190,38 @@
     <div id="earnings-text" class="aurora-gradient"></div>
 
 
-    <!-- The JavaScript is unchanged -->
+    <!-- The JavaScript is updated to generate the SVG stars -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- NEW: SVG Star Generation Logic ---
+            function generateStars(svgId, count, minSize, maxSize) {
+                const svg = document.getElementById(svgId);
+                const width = window.innerWidth;
+                const height = 2000; // Generate stars over a taller area for animation
+                const ns = "http://www.w3.org/2000/svg";
+
+                for(let i = 0; i < count; i++) {
+                    const star = document.createElementNS(ns, 'circle');
+                    const x = Math.random() * width;
+                    const y = Math.random() * height;
+                    const r = Math.random() * (maxSize - minSize) + minSize;
+                    const opacity = Math.random() * 0.5 + 0.5; // Random opacity for twinkling effect
+
+                    star.setAttribute('cx', x);
+                    star.setAttribute('cy', y);
+                    star.setAttribute('r', r);
+                    star.setAttribute('fill', 'white');
+                    star.setAttribute('opacity', opacity);
+                    svg.appendChild(star);
+                }
+            }
+            
+            // Generate three layers of stars with different properties
+            generateStars('stars1', 200, 0.5, 1);
+            generateStars('stars2', 150, 0.5, 1.2);
+            generateStars('stars3', 100, 0.5, 1.5);
+
+            // --- Earnings Calculator Logic (unchanged) ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 }, musk: { name: 'Elon Musk', rate: 631 },
                 trump: { name: 'Donald Trump', rate: 12 }, page: { name: 'Larry Page', rate: 951 },
@@ -225,6 +241,7 @@
             }
             updateEarnings();
 
+            // --- Button Reveal Logic (unchanged) ---
             const buttonContainer = document.querySelector('.button-container');
             let buttonsHaveBeenRevealed = false;
 
