@@ -57,7 +57,7 @@
             -webkit-text-fill-color: transparent;
         }
         
-        /* Button Interaction Redesigned */
+        /* Button Interaction Styling */
         .button-container {
             min-height: 100px;
             display: flex;
@@ -67,23 +67,19 @@
         }
 
         .aurora-button {
-            /* Default state: hidden */
             clip-path: circle(0% at 50% 50%);
-            /* The transition is now on the button itself */
             transition: clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            
             position: relative;
             display: inline-block;
             text-decoration: none;
             z-index: 1;
         }
         
-        /* NEW: This class, added by JS, triggers the animation */
         .buttons-activated .aurora-button {
             clip-path: circle(75% at 50% 50%);
         }
         
-        /* NEW: Staggered reveal animation using transition-delay */
+        /* Staggered reveal animation */
         .buttons-activated .aurora-button:nth-child(2) {
             transition-delay: 0.1s;
         }
@@ -147,7 +143,7 @@
     <div class="page-container">
         <section class="hero">
             <h1 class="aurora-gradient">Stunningly Simple.</h1>
-            <div class="button-container" id="button-trigger-area">
+            <div class="button-container">
                 <a href="#" class="aurora-button" id="btn-work">
                     <span class="content aurora-gradient">My Work</span>
                 </a>
@@ -167,7 +163,7 @@
     <!-- ALL JAVASCRIPT IS INLINED HERE -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Earnings Calculator Logic (remains unchanged) ---
+            // --- Earnings Calculator Logic (unchanged) ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 }, musk: { name: 'Elon Musk', rate: 631 },
                 trump: { name: 'Donald Trump', rate: 12 }, page: { name: 'Larry Page', rate: 951 },
@@ -188,9 +184,9 @@
             updateEarnings();
 
 
-            // --- RE-ARCHITECTED: One-Time Reveal Logic ---
-            const buttonTriggerArea = document.getElementById('button-trigger-area');
-            let buttonsHaveBeenRevealed = false; // A flag to ensure this only runs once.
+            // --- RE-ARCHITECTED: One-Time Reveal on First Mouse Movement ---
+            const buttonContainer = document.querySelector('.button-container');
+            let buttonsHaveBeenRevealed = false;
 
             // This function attaches the gradient background to each button's border
             document.querySelectorAll('.aurora-button').forEach(button => {
@@ -201,20 +197,23 @@
                 document.head.appendChild(borderElement);
             });
 
-            function revealButtons() {
-                // If we've already run this, do nothing. This is the key to making it permanent.
+            function revealButtonsOnFirstMove() {
+                // If this function has already run, do nothing.
                 if (buttonsHaveBeenRevealed) {
                     return;
                 }
-                // Set the flag to true so it never runs again.
+                // Set the flag to true so this logic never runs again.
                 buttonsHaveBeenRevealed = true;
                 
-                // Add the magic class that triggers the CSS animations.
-                buttonTriggerArea.classList.add('buttons-activated');
+                // Add the class that triggers the CSS animations.
+                buttonContainer.classList.add('buttons-activated');
+                
+                // For maximum performance, remove the event listener after it has fired once.
+                document.body.removeEventListener('mousemove', revealButtonsOnFirstMove);
             }
             
-            // Listen for the mouse entering the trigger area for the first time.
-            buttonTriggerArea.addEventListener('mouseenter', revealButtons);
+            // Listen for the very first mouse movement anywhere on the page body.
+            document.body.addEventListener('mousemove', revealButtonsOnFirstMove);
         });
     </script>
 </body>
