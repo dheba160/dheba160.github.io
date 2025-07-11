@@ -1,20 +1,38 @@
+<!-- The DOCTYPE declaration defines the document type to be HTML5 -->
 <!DOCTYPE html>
+<!-- The <html> element is the root element of an HTML page. 'lang="en"' specifies the language is English. -->
 <html lang="en">
+
+<!-- The <head> element contains meta-information about the HTML document -->
 <head>
+    <!-- 'charset="UTF-8"' sets the character set to UTF-8 to support most characters and symbols -->
     <meta charset="UTF-8">
+    <!-- The viewport meta tag ensures the site is responsive and displays correctly on all devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- The <title> tag specifies the title for the browser tab -->
     <title>Dennis Heba | Welcome</title>
+
+    <!-- This links to Google Fonts to import the 'Poppins' font for a modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
-    <!-- The link below is the most important part. It must find your style.css file. -->
+    <!-- This links the external stylesheet. The './' ensures it looks in the current directory. -->
     <link rel="stylesheet" href="./style.css">
-
 </head>
+
+<!-- The <body> element defines the document's body, which contains all the visible contents -->
 <body>
+
+    <!-- The <header> element represents a container for introductory content or a set of navigational links. -->
     <header class="main-header">
+        <!-- The <nav> element defines a set of navigation links. -->
         <nav class="main-nav">
+            <!-- This div holds the logo or site title. -->
             <div class="logo">Dennis Heba</div>
+            <!-- 'ul' stands for unordered list, used here for the navigation menu. -->
             <ul>
+                <!-- Each 'li' is a list item, and each 'a' (anchor) tag is a link. -->
+                <!-- The 'active' class is used to highlight the current page in the navigation. -->
                 <li><a href="./index.html" class="active">Home</a></li>
                 <li><a href="./contact.html">Contact</a></li>
                 <li><a href="./privacy.html">Privacy Policy</a></li>
@@ -22,30 +40,25 @@
         </nav>
     </header>
 
+    <!-- The <main> element specifies the main content of a document. -->
     <main>
+        <!-- The <section> element defines a section in a document. The 'hero' is the main banner. -->
         <section class="hero">
             <div class="hero-content">
+                <!-- 'h1' is the main heading for the page. -->
                 <h1>Stunningly Simple.</h1>
+                <!-- 'p' is a paragraph tag. The 'subtitle' class provides specific styling. -->
                 <p class="subtitle">A clean and modern website built with HTML & CSS.</p>
+                <!-- This anchor tag is styled as a button using the 'btn' class. -->
                 <a href="./contact.html" class="btn">Get In Touch</a>
             </div>
         </section>
     </main>
 
+    <!-- The <footer> element defines a footer for the document or a section. -->
     <footer class="main-footer">
         <p>© 2025 Dennis Heba.</p>
     </footer>
+
 </body>
-</html>```
-
-**What did I change?**
-
-I changed the links from `href="style.css"` to `href="./style.css"`. This `./` explicitly tells the browser to look in the current directory. I did the same for the navigation links (`index.html`, `contact.html`, etc.) for consistency.
-
-### **Step 3: The Final Checklist**
-
-1.  **Save the File:** Commit the changes to your `index.html` file on GitHub.
-2.  **Wait 60 Seconds:** Give GitHub a moment to see your change and start updating the website.
-3.  **Hard Refresh Your Browser:** This is critical. Go to your website and press **`Ctrl + Shift + R`** (on Windows/Linux) or **`Cmd + Shift + R`** (on Mac). This forces the browser to ignore its saved cache and download all the files again.
-
-If the page still looks the same after this, it is almost a 100% guarantee that the issue lies with the **name or location** of your `style.css` file.
+</html>
