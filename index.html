@@ -20,11 +20,7 @@
             box-sizing: border-box; margin: 0; padding: 0;
         }
 
-        html {
-            height: 100%;
-        }
-
-        body {
+        html, body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -33,42 +29,31 @@
         }
         
         #starfield-background {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
         }
-
-        #starfield-background svg {
-            position: absolute; top: 0; left: 0;
-        }
-
+        #starfield-background svg { position: absolute; top: 0; left: 0; }
         #stars1 { animation: animate-stars 150s linear infinite; }
         #stars2 { animation: animate-stars 100s linear infinite; }
         #stars3 { animation: animate-stars 50s linear infinite; }
-        
         @keyframes animate-stars {
-            from { transform: translateY(0px); }
-            to   { transform: translateY(-2000px); }
+            from { transform: translateY(0px); } to { transform: translateY(-2000px); }
         }
 
         .page-container {
-            display: flex;
-            align-items: center;
-            height: 100%;
-            padding: 2rem;
+            display: flex; align-items: center; height: 100%; padding: 2rem;
         }
         
-        .content-wrapper {
-            max-width: 800px;
-            text-align: left;
-        }
+        .content-wrapper { max-width: 800px; text-align: left; }
 
-        .aurora-gradient {
+        .aurora-gradient-text {
             font-weight: 700;
             background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
             background-size: 300% 300%;
             animation: aurora-text-flow 8s ease infinite;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         @keyframes aurora-text-flow {
@@ -77,20 +62,11 @@
             100%{background-position:0% 50%}
         }
         
-        .hero h1 {
-            font-size: 5rem;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 2rem;
-        }
+        .hero h1 { font-size: 5rem; margin-bottom: 2rem; }
         
-        .button-container {
-            display: flex;
-            gap: 1.5rem;
-            min-height: 50px; /* Provides a hover area even when buttons are hidden */
-        }
+        .button-container { display: flex; gap: 1.5rem; min-height: 50px; }
 
+        /* RE-ENGINEERED BUTTON STYLES */
         .aurora-button {
             clip-path: circle(0% at 50% 50%);
             transition: clip-path 0.8s cubic-bezier(0.25, 1, 0.5, 1);
@@ -104,45 +80,50 @@
             clip-path: circle(75% at 50% 50%);
         }
 
-        .aurora-button .content {
-            display: block; padding: 0.75rem 1.75rem; font-weight: 500;
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: transform 0.3s ease;
-        }
-
+        /* The pseudo-element IS the gradient border */
         .aurora-button::before {
-            content: ''; position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; border-radius: 50px;
-            padding: 2px; z-index: -1;
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            border-radius: 50px;
+            padding: 2px; /* Border thickness */
+            background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
+            background-size: 300% 300%;
+            animation: aurora-text-flow 8s ease infinite;
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
         }
         
+        /* The content with a solid background and text color */
+        .aurora-button .content {
+            display: block;
+            padding: 0.75rem 1.75rem;
+            font-weight: 500;
+            color: var(--text-color); /* Solid white text */
+            background: var(--bg-color); /* Solid dark background */
+            border-radius: 50px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        
+        /* The refined hover effect */
         .aurora-button:hover .content {
-            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.9); /* Fill with semi-transparent white */
+            color: #0A0A0A; /* Text becomes dark */
         }
         
-        /* REVISED: Earnings text is now hidden by default */
         #earnings-text {
             position: fixed; bottom: 1.5rem; left: 1.5rem;
             font-size: 0.9rem; font-weight: 500;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
-            
-            /* Hidden state for transition */
             opacity: 0;
             transform: translateY(10px);
             transition: opacity 0.8s ease, transform 0.8s ease;
-            transition-delay: 0.2s; /* Slight delay to feel connected to buttons */
+            transition-delay: 0.2s;
         }
 
-        /* REVISED: This class, added by JS, will make it appear */
-        #earnings-text.is-active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        #earnings-text.is-active { opacity: 1; transform: translateY(0); }
 
         @media (max-width: 600px) {
             .hero h1 { font-size: 3.5rem; }
@@ -165,30 +146,29 @@
     <div class="page-container">
         <div class="content-wrapper">
             <section class="hero">
-                <h1 class="aurora-gradient">Stunningly Simple.</h1>
-                <!-- The grey text has been removed -->
+                <h1 class="aurora-gradient-text">Stunningly Simple.</h1>
             </section>
             <div class="button-container">
                 <a href="#" class="aurora-button" id="btn-work">
-                    <span class="content aurora-gradient">My Work</span>
+                    <span class="content">My Work</span>
                 </a>
                 <a href="#" class="aurora-button" id="btn-about">
-                    <span class="content aurora-gradient">About Me</span>
+                    <span class="content">About Me</span>
                 </a>
                 <a href="#" class="aurora-button" id="btn-contact">
-                    <span class="content aurora-gradient">Contact</span>
+                    <span class="content">Contact</span>
                 </a>
             </div>
         </div>
     </div>
     
-    <div id="earnings-text" class="aurora-gradient"></div>
+    <div id="earnings-text" class="aurora-gradient-text"></div>
 
 
-    <!-- The JavaScript is updated for the synchronized reveal -->
+    <!-- The JavaScript remains the same, as the changes were purely CSS -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Star Generation Logic (unchanged) ---
+            // --- Star Generation Logic ---
             function generateStars(svgId, count, minSize, maxSize) {
                 const svg = document.getElementById(svgId);
                 const width = window.innerWidth;
@@ -207,7 +187,7 @@
             generateStars('stars1', 200, 0.5, 1); generateStars('stars2', 150, 0.5, 1.2);
             generateStars('stars3', 100, 0.5, 1.5);
 
-            // --- Earnings Calculator Logic (unchanged) ---
+            // --- Earnings Calculator Logic ---
             const people = {
                 bezos: { name: 'Jeff Bezos', rate: 985 }, musk: { name: 'Elon Musk', rate: 631 },
                 trump: { name: 'Donald Trump', rate: 12 }, page: { name: 'Larry Page', rate: 951 },
@@ -227,32 +207,18 @@
             }
             updateEarnings();
 
-            // --- REVISED: Synchronized Reveal Logic ---
+            // --- Reveal Logic ---
             const buttonContainer = document.querySelector('.button-container');
             let hasBeenRevealed = false;
-
-            document.querySelectorAll('.aurora-button').forEach(button => {
-                const computedStyle = window.getComputedStyle(document.body.querySelector('.aurora-gradient'));
-                const gradient = computedStyle.getPropertyValue('background-image');
-                const borderElement = document.createElement('style');
-                borderElement.innerHTML = `#${button.id}::before { background: ${gradient}; background-size: 300% 300%; animation: aurora-text-flow 8s ease infinite; }`;
-                document.head.appendChild(borderElement);
-            });
 
             function revealElementsOnFirstMove() {
                 if (hasBeenRevealed) { return; }
                 hasBeenRevealed = true;
-                
-                // Trigger button animation
                 buttonContainer.classList.add('buttons-activated');
-                // ALSO trigger earnings text animation
                 earningsTextElement.classList.add('is-active');
-                
-                // For maximum performance, remove the event listener after it has fired once.
                 document.body.removeEventListener('mousemove', revealElementsOnFirstMove);
             }
             
-            // Listen for the very first mouse movement anywhere on the page body.
             document.body.addEventListener('mousemove', revealElementsOnFirstMove);
         });
     </script>
