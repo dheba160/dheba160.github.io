@@ -7,15 +7,13 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- ALL STYLES ARE INLINED TO GUARANTEE THEY LOAD -->
     <style>
         :root {
             --bg-color: #0A0A0A;
             --text-color: #EAEAEA;
-            --primary-color: #3371FF;
-            --border-color: rgba(255, 255, 255, 0.1);
         }
 
         *, *::before, *::after {
@@ -30,22 +28,22 @@
         }
         
         .page-container {
-            max-width: 800px;
-            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            padding-top: 10vh;
+            min-height: 80vh; /* Pushes content to the vertical center */
         }
 
-        .hero h1 {
-            font-size: 4.5rem;
+        /* The gradient text style, applied to both elements */
+        .gradient-text {
             font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6);
-            background-size: 400% 400%;
+            background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: aurora-text 10s ease infinite;
+            animation: aurora-text 8s ease infinite;
         }
 
         @keyframes aurora-text {
@@ -54,268 +52,109 @@
             100%{background-position:0% 50%}
         }
 
-        .hero p {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.7);
+        .hero h1 {
+            font-size: 5rem;
+        }
+        
+        /* The new earnings text element */
+        #earnings-text {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            font-size: 0.9rem; /* Small and classy */
+            font-weight: 500;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Improves readability */
+            opacity: 0; /* Starts hidden */
+            animation: fade-in-up 1s ease 0.5s forwards; /* Fades in gracefully */
         }
 
-        .fun-switch-container {
-            position: fixed; top: 2rem; right: 2rem; display: flex;
-            align-items: center; gap: 0.75rem; font-size: 0.9rem;
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-
-        .toggle-switch {
-            position: relative; display: inline-block; width: 50px; height: 28px;
-        }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #2c2c2e; transition: .4s; border-radius: 28px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 20px; width: 20px;
-            left: 4px; bottom: 4px; background-color: white;
-            transition: .4s; border-radius: 50%;
-        }
-        input:checked + .slider { background-color: var(--primary-color); }
-        input:checked + .slider:before { transform: translateX(22px); }
-        
-        .earnings-widget {
-            position: fixed; bottom: 2rem; left: 2rem;
-            background: rgba(28, 28, 30, 0.7);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 1.25rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            width: 340px;
-            opacity: 0; visibility: hidden;
-            transform: translateY(20px);
-            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
-        }
-        
-        .earnings-widget.visible {
-            opacity: 1; visibility: visible; transform: translateY(0);
-        }
-        
-        .widget-controls {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 1rem; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);
-        }
-
-        .widget-controls select {
-            background: #3a3a3c; color: var(--text-color);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 5px; padding: 0.3rem 0.5rem;
-        }
-        
-        /* New Robust Flip Clock Styles */
-        .flip-clock-display {
-            display: flex; justify-content: center; align-items: center;
-            height: 4rem; font-family: 'Roboto Mono', monospace;
-            font-size: 3rem; font-weight: 500;
-        }
-
-        .char-slot { position: relative; }
-        .digit {
-            position: relative; height: 4rem; width: 2.5rem;
-            margin: 0 0.1rem; perspective: 300px;
-        }
-        
-        .digit .static-top, .digit .flipper-bottom-face {
-            line-height: 4rem; position: absolute; top: 0; left: 0;
-            width: 100%; height: 50%; text-align: center;
-            overflow: hidden;
-        }
-        
-        .digit .static-bottom, .digit .flipper-top-face {
-            line-height: 0; position: absolute; bottom: 0; left: 0;
-            width: 100%; height: 50%; text-align: center;
-            overflow: hidden;
-        }
-
-        .digit .flipper {
-            position: absolute; top: 0; left: 0; width: 100%; height: 50%;
-            transform-style: preserve-3d; transform-origin: bottom;
-            transition: transform 0.5s ease-in-out;
-        }
-        
-        .flipper-face {
-            position: absolute; width: 100%; height: 100%;
-            backface-visibility: hidden;
-        }
-        
-        .flipper .flipper-bottom-face { transform: rotateX(180deg); }
-        .flipper.flipping { transform: rotateX(-180deg); }
 
         /* Responsive */
         @media (max-width: 600px) {
             .hero h1 { font-size: 3rem; }
-            .fun-switch-container { top: 1rem; right: 1rem; }
-            .earnings-widget { left: 1rem; right: 1rem; bottom: 1rem; width: auto; }
-            .flip-clock-display { font-size: 2.2rem; height: 3rem; }
-            .digit { height: 3rem; width: 1.8rem; }
-            .digit .static-top, .digit .flipper-bottom-face { line-height: 3rem; }
+            #earnings-text { 
+                font-size: 0.8rem;
+                left: 1rem;
+                right: 1rem;
+                text-align: center;
+                bottom: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    
-    <div class="fun-switch-container">
-        <span>Fun Switch</span>
-        <label class="toggle-switch">
-            <input type="checkbox" id="fun-switch-checkbox">
-            <span class="slider"></span>
-        </label>
-    </div>
 
     <div class="page-container">
         <section class="hero">
-            <h1>Stunningly Simple.</h1>
-            <p>A clean and modern website built with HTML, CSS & JavaScript.</p>
+            <h1 class="gradient-text">Stunningly Simple.</h1>
         </section>
     </div>
     
-    <div class="earnings-widget" id="earnings-widget">
-        <div class="widget-controls">
-            <span>Amount earned by</span>
-            <select id="person-select">
-                <option value="bezos">Jeff Bezos</option>
-                <option value="musk">Elon Musk</option>
-                <option value="trump">Donald Trump</option>
-                <option value="page">Larry Page</option>
-                <option value="arnault">Bernard Arnault</option>
-                <option value="zuckerberg">Mark Zuckerberg</option>
-                <option value="gates">Bill Gates</option>
-            </select>
-        </div>
-        <div class="flip-clock-display" id="earnings-display"></div>
-    </div>
+    <!-- This is the new, simple text element that will be updated by the script -->
+    <div id="earnings-text" class="gradient-text"></div>
 
 
     <!-- ALL JAVASCRIPT IS INLINED HERE -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const earningsPerSecond = {
-                bezos: 985, musk: 631, trump: 12, page: 951,
-                arnault: 196, zuckerberg: 469, gates: 117
+
+            // --- Data for the random selection ---
+            const people = {
+                bezos: { name: 'Jeff Bezos', rate: 985 },
+                musk: { name: 'Elon Musk', rate: 631 },
+                trump: { name: 'Donald Trump', rate: 12 },
+                page: { name: 'Larry Page', rate: 951 },
+                arnault: { name: 'Bernard Arnault', rate: 196 },
+                zuckerberg: { name: 'Mark Zuckerberg', rate: 469 },
+                gates: { name: 'Bill Gates', rate: 117 }
             };
 
-            // DOM Elements
-            const funSwitch = document.getElementById('fun-switch-checkbox');
-            const widget = document.getElementById('earnings-widget');
-            const personSelect = document.getElementById('person-select');
-            const displayContainer = document.getElementById('earnings-display');
-            
-            // State Management
-            let selectedPerson = 'bezos';
-            let animationFrameId = null;
-            let lastToggleOnTime = 0;
-            let totalTimeOn = 0; // Tracks total time the switch has been 'on'
-            let digitElements = [];
+            const personKeys = Object.keys(people);
 
-            // --- Clock Building and Animation Logic ---
-            function createClock(templateString) {
-                displayContainer.innerHTML = '';
-                digitElements = [];
-                for (const char of templateString) {
-                    const charSlot = document.createElement('div');
-                    charSlot.className = 'char-slot';
-                    if (/\d/.test(char)) {
-                        charSlot.classList.add('digit');
-                        charSlot.innerHTML = `
-                            <div class="static-top">${char}</div>
-                            <div class="static-bottom">${char}</div>
-                            <div class="flipper">
-                                <div class="flipper-face flipper-top-face">${char}</div>
-                                <div class="flipper-face flipper-bottom-face">${char}</div>
-                            </div>`;
-                    } else {
-                        charSlot.textContent = char;
-                    }
-                    displayContainer.appendChild(charSlot);
-                    digitElements.push(charSlot);
-                }
-            }
-            
-            function flipDigit(digitElement, newChar, oldChar) {
-                const flipper = digitElement.querySelector('.flipper');
-                if (flipper.classList.contains('flipping')) return;
+            // --- Randomly Select One Person on Page Load ---
+            // This code runs only ONCE.
+            const randomIndex = Math.floor(Math.random() * personKeys.length);
+            const chosenKey = personKeys[randomIndex];
+            const chosenPerson = people[chosenKey];
 
-                const topFace = digitElement.querySelector('.flipper-top-face');
-                const bottomFace = digitElement.querySelector('.flipper-bottom-face');
-                const staticTop = digitElement.querySelector('.static-top');
-                
-                topFace.textContent = oldChar;
-                bottomFace.textContent = newChar;
-                staticTop.textContent = newChar;
+            // --- DOM Element and Timing ---
+            const earningsTextElement = document.getElementById('earnings-text');
+            const startTime = Date.now(); // Start the timer the moment the script runs.
 
-                flipper.classList.add('flipping');
+            // --- The Animation Loop ---
+            // This runs constantly to update the numbers smoothly.
+            function updateEarnings() {
+                // Calculate total elapsed time and earnings
+                const elapsedTimeMs = Date.now() - startTime;
+                const currentEarnings = (elapsedTimeMs / 1000) * chosenPerson.rate;
 
-                flipper.addEventListener('transitionend', () => {
-                    digitElement.querySelector('.static-bottom').textContent = newChar;
-                    flipper.classList.remove('flipping');
-                    flipper.style.transition = 'none'; // Prevent animation on reset
-                    flipper.style.transform = 'rotateX(0deg)';
-                    requestAnimationFrame(() => { // Re-enable transition for next flip
-                        flipper.style.transition = 'transform 0.5s ease-in-out';
-                    });
-                }, { once: true });
-            }
-
-            let lastDisplayedString = '$0.00';
-            createClock(lastDisplayedString); // Initial setup
-
-            // --- Animation Loop ---
-            function animateEarnings() {
-                const timeSinceLastToggle = Date.now() - lastToggleOnTime;
-                const totalElapsedMs = totalTimeOn + timeSinceLastToggle;
-                const ratePerSecond = earningsPerSecond[selectedPerson];
-                const currentEarnings = (totalElapsedMs / 1000) * ratePerSecond;
-                
-                const earningsString = currentEarnings.toLocaleString('en-US', {
-                    style: 'currency', currency: 'USD'
+                // Format the number to a currency string (e.g., "$1,234.56")
+                const formattedEarnings = currentEarnings.toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
                 });
 
-                if (earningsString.length !== lastDisplayedString.length) {
-                    createClock(earningsString);
-                }
+                // Construct the final sentence and update the text on the page
+                earningsTextElement.textContent = `Since you've been here, ${chosenPerson.name} has earned ${formattedEarnings}`;
 
-                for (let i = 0; i < earningsString.length; i++) {
-                    if (earningsString[i] !== lastDisplayedString[i]) {
-                        const element = digitElements[i];
-                        if (element.classList.contains('digit')) {
-                            flipDigit(element, earningsString[i], lastDisplayedString[i]);
-                        }
-                    }
-                }
-                
-                lastDisplayedString = earningsString;
-                animationFrameId = requestAnimationFrame(animateEarnings);
+                // Request the next frame to create a smooth, continuous animation
+                requestAnimationFrame(updateEarnings);
             }
 
-            // --- Event Listeners ---
-            funSwitch.addEventListener('change', () => {
-                if (funSwitch.checked) {
-                    // Turn On
-                    widget.classList.add('visible');
-                    lastToggleOnTime = Date.now();
-                    if (animationFrameId === null) {
-                       animateEarnings();
-                    }
-                } else {
-                    // Turn Off
-                    widget.classList.remove('visible');
-                    if (animationFrameId) {
-                        cancelAnimationFrame(animationFrameId);
-                        animationFrameId = null;
-                        totalTimeOn += Date.now() - lastToggleOnTime;
-                    }
-                }
-            });
-
-            personSelect.addEventListener('change', (e) => {
-                selectedPerson = e.target.value;
-            });
+            // --- Initial Call ---
+            // Start the entire process.
+            updateEarnings();
         });
     </script>
 </body>
-</html>```
+</html>
