@@ -36,7 +36,6 @@
             min-height: 80vh;
         }
 
-        /* Unified gradient style for all key elements */
         .aurora-gradient {
             font-weight: 700;
             background: linear-gradient(90deg, #FAD961, #F76B1C, #BB86FC, #29C5F6, #FAD961);
@@ -53,12 +52,12 @@
         .hero h1 {
             font-size: 5rem;
             margin-bottom: 2rem;
-            -webkit-background-clip: text; /* Apply gradient to text */
+            -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
-        /* --------- Proximity Buttons Redesigned --------- */
+        /* Proximity Buttons - Refined */
         .button-container {
             min-height: 100px;
             display: flex;
@@ -68,9 +67,9 @@
         }
 
         .aurora-button {
-            /* Initial state: Clipped and invisible */
+            /* Default state: hidden via clip-path */
             clip-path: circle(0% at 50% 50%);
-            transition: clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth "pop" animation */
+            transition: clip-path 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             
             position: relative;
             display: inline-block;
@@ -78,35 +77,33 @@
             z-index: 1;
         }
         
-        /* The visible text part of the button */
+        /* NEW: Visible state class controlled by JS */
+        .aurora-button.is-visible {
+            clip-path: circle(75% at 50% 50%); /* 75% creates a cleaner pop effect */
+        }
+        
         .aurora-button .content {
             display: block;
             padding: 0.75rem 1.75rem;
             font-weight: 500;
-            -webkit-background-clip: text; /* Apply gradient to text */
+            -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             transition: transform 0.3s ease;
         }
 
-        /* The gradient border, created using a pseudo-element behind the content */
         .aurora-button::before {
             content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
             border-radius: 50px;
-            padding: 2px; /* This padding creates the border thickness */
+            padding: 2px;
             z-index: -1;
-            -webkit-mask: /* The magic: A solid color with a hole in the middle */
-                 linear-gradient(#fff 0 0) content-box, 
-                 linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
         }
         
-        /* Hover state: intensifies the effect */
         .aurora-button:hover .content {
             transform: scale(1.05);
         }
@@ -182,17 +179,14 @@
             updateEarnings();
 
 
-            // --- REFINED: Proximity "Pop-Up" Button Logic ---
-            const buttons = document.querySelectorAll('.aurora-button');
-            // The trigger distance is now much smaller for a more refined feel
+            // --- RE-ARCHITECTED: High-Performance Proximity Logic ---
+            const buttons = Array.from(document.querySelectorAll('.aurora-button'));
             const maxDistance = 150; 
 
             // This function attaches the gradient background to the ::before pseudo-element
             buttons.forEach(button => {
-                // Get the computed style of the shared gradient from the body
                 const computedStyle = window.getComputedStyle(document.body.querySelector('.aurora-gradient'));
                 const gradient = computedStyle.getPropertyValue('background-image');
-                // Apply it to the button's border pseudo-element
                 const borderElement = document.createElement('style');
                 borderElement.innerHTML = `#${button.id}::before { background: ${gradient}; background-size: 300% 300%; animation: aurora-text-flow 8s ease infinite; }`;
                 document.head.appendChild(borderElement);
@@ -201,21 +195,32 @@
             function handleMouseMove(event) {
                 const mouseX = event.clientX;
                 const mouseY = event.clientY;
+                
+                let closestButton = null;
+                let minDistance = Infinity;
 
+                // Step 1: Find the single closest button
                 buttons.forEach(button => {
                     const rect = button.getBoundingClientRect();
                     const buttonX = rect.left + rect.width / 2;
                     const buttonY = rect.top + rect.height / 2;
-
                     const distance = Math.sqrt(Math.pow(mouseX - buttonX, 2) + Math.pow(mouseY - buttonY, 2));
                     
-                    // Proximity is now a simple 0 or 1, but could be made smoother
-                    const proximity = Math.max(0, 1 - distance / maxDistance);
-
-                    // This calculation creates the "pop-up" effect.
-                    // The clip-path radius grows from 0% to 150% based on proximity.
-                    const clipRadius = proximity * 150; 
-                    button.style.clipPath = `circle(${clipRadius}% at 50% 50%)`;
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestButton = button;
+                    }
+                });
+                
+                // Step 2: Update only the necessary buttons
+                buttons.forEach(button => {
+                    if (button === closestButton && minDistance < maxDistance) {
+                        // If this is the closest button AND it's within range, make it visible.
+                        button.classList.add('is-visible');
+                    } else {
+                        // Otherwise, ensure it is hidden.
+                        button.classList.remove('is-visible');
+                    }
                 });
             }
             
