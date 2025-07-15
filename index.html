@@ -30,6 +30,8 @@
             color: var(--text-color);
             overflow: hidden;
             height: 100%;
+            opacity: 0;
+            animation: page-fade-in 0.5s forwards;
         }
         
         #starfield-background {
@@ -145,6 +147,20 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .fade-out {
+            animation: page-fade-out 0.5s forwards;
+        }
+
+        @keyframes page-fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes page-fade-out {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
         @media (max-width: 600px) {
             .hero h1 { font-size: 3.5rem; }
             .button-container { flex-direction: column; align-items: flex-start; }
@@ -171,13 +187,13 @@
             </section>
             <div class="button-container">
                 <!-- UPDATED: href attributes are now added -->
-                <a href="#work" class="aurora-button" id="btn-work">
+                <a href="work.html" class="aurora-button transition-link" id="btn-work">
                     <span class="content aurora-gradient">My Work</span>
                 </a>
-                <a href="#about" class="aurora-button" id="btn-about">
+                <a href="about.html" class="aurora-button transition-link" id="btn-about">
                     <span class="content aurora-gradient">About Me</span>
                 </a>
-                <a href="#contact" class="aurora-button" id="btn-contact">
+                <a href="contact.html" class="aurora-button transition-link" id="btn-contact">
                     <span class="content aurora-gradient">Contact</span>
                 </a>
             </div>
@@ -254,6 +270,16 @@
             }
             
             document.body.addEventListener('mousemove', revealButtonsOnFirstMove);
+
+            document.querySelectorAll('.transition-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => {
+                        window.location.href = link.href;
+                    }, 500);
+                });
+            });
         });
     </script>
 </body>
