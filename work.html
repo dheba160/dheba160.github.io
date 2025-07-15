@@ -187,8 +187,8 @@
             </section>
             <div class="button-container">
                 <!-- UPDATED: href attributes are now added -->
-                <a href="work.html" class="aurora-button transition-link" id="btn-work">
-                    <span class="content aurora-gradient">My Work</span>
+                <a href="index.html" class="aurora-button transition-link" id="btn-work">
+                    <span class="content aurora-gradient">Home</span>
                 </a>
                 <a href="about.html" class="aurora-button transition-link" id="btn-about">
                     <span class="content aurora-gradient">About Me</span>
@@ -239,9 +239,23 @@
                 gates: { name: 'Bill Gates', rate: 117 }
             };
             const personKeys = Object.keys(people);
-            const chosenPerson = people[personKeys[Math.floor(Math.random() * personKeys.length)]];
+
+            let chosenPersonKey = sessionStorage.getItem('chosenPersonKey');
+            if (!chosenPersonKey) {
+                chosenPersonKey = personKeys[Math.floor(Math.random() * personKeys.length)];
+                sessionStorage.setItem('chosenPersonKey', chosenPersonKey);
+            }
+            const chosenPerson = people[chosenPersonKey];
+
+            let startTime = sessionStorage.getItem('startTime');
+            if (!startTime) {
+                startTime = Date.now();
+                sessionStorage.setItem('startTime', startTime);
+            } else {
+                startTime = parseInt(startTime, 10);
+            }
+
             const earningsTextElement = document.getElementById('earnings-text');
-            const startTime = Date.now();
 
             function updateEarnings() {
                 const elapsedTimeMs = Date.now() - startTime;
