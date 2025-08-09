@@ -75,10 +75,8 @@
         container.appendChild(particleLayer);
     }
 
-    // Enhanced scroll effects with parallax and dynamic animations
+    // Simplified scroll effects - removed animation frame for stability
     function setupScrollEffects() {
-        let ticking = false;
-        
         // Cache DOM elements
         const layers = document.querySelectorAll('.parallax-layer');
         const heroContent = document.querySelector('.hero-content');
@@ -87,7 +85,6 @@
         
         function updateScrollEffects() {
             const scrolled = window.pageYOffset;
-            const windowHeight = window.innerHeight;
             
             // Simple parallax for layers
             layers.forEach((layer, index) => {
@@ -100,7 +97,6 @@
             if (heroContent) {
                 // Ensure opacity returns to 1 when scrolled back to top
                 const heroOpacity = Math.max(0, Math.min(1, 1 - (scrolled / 500)));
-                // Remove transform to prevent bouncing
                 heroContent.style.opacity = heroOpacity;
             }
             
@@ -115,19 +111,11 @@
                 const scale = 1 + Math.sin(scrolled * 0.001 + index) * 0.03;
                 orb.style.transform = `scale(${scale})`;
             });
-            
-            ticking = false;
         }
         
-        function requestTick() {
-            if (!ticking) {
-                window.requestAnimationFrame(updateScrollEffects);
-                ticking = true;
-            }
-        }
-        
-        window.addEventListener('scroll', requestTick, { passive: true });
-        window.addEventListener('resize', requestTick, { passive: true });
+        // Direct scroll event without animation frame for stability
+        window.addEventListener('scroll', updateScrollEffects, { passive: true });
+        window.addEventListener('resize', updateScrollEffects, { passive: true });
         
         // Initial call
         updateScrollEffects();
@@ -214,12 +202,15 @@
                             }, 100);
                         }
                         
-                        // Animate cards with stagger
+                        // Animate cards with stagger - fixed to prevent flickering
                         const cards = entry.target.querySelectorAll('.about-card, .skill-card, .experience-item');
                         cards.forEach((card, cardIndex) => {
-                            setTimeout(() => {
-                                card.classList.add('fade-in');
-                            }, 100 + cardIndex * 100);
+                            // Only add animation if not already animated
+                            if (!card.classList.contains('animated')) {
+                                setTimeout(() => {
+                                    card.classList.add('animated');
+                                }, 100 + cardIndex * 100);
+                            }
                         });
                         
                         entry.target.classList.add('section-visible');
