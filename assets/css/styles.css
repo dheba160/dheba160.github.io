@@ -620,14 +620,9 @@ body {
     color: #667eea;
 }
 
-/* Hero content scroll effects */
-.hero-content.scrolled {
-    transform: translateY(-50px) scale(0.95);
-    opacity: 0.7;
-}
-
+/* Hero content - removed scroll transforms to prevent bouncing */
 .hero-content {
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    /* Transform and opacity handled by JavaScript */
     opacity: 1 !important; /* Ensure it's always visible by default */
 }
 

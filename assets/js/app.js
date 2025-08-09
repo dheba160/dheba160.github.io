@@ -96,12 +96,11 @@
                 layer.style.transform = `translateY(${yPos}px)`;
             });
             
-            // Hero content - simpler fade effect that properly returns to full opacity
+            // Hero content - fade effect only, no vertical movement
             if (heroContent) {
-                const heroOffset = scrolled * 0.4;
                 // Ensure opacity returns to 1 when scrolled back to top
                 const heroOpacity = Math.max(0, Math.min(1, 1 - (scrolled / 500)));
-                heroContent.style.transform = `translateY(${heroOffset}px)`;
+                // Remove transform to prevent bouncing
                 heroContent.style.opacity = heroOpacity;
             }
             
