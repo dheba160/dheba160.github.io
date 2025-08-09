@@ -1,0 +1,172 @@
+/* Performance Optimizations for Smoother Scrolling */
+
+/* Enable GPU acceleration for animated elements */
+.parallax-layer,
+.geo-shape,
+.gradient-orb,
+.particle {
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Optimize transition timing functions */
+.btn,
+.skill-card,
+.contact-link,
+.floating-nav,
+.floating-nav a,
+.skill-modal-close,
+.about-card {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.3s;
+}
+
+/* Reduce paint areas */
+.parallax-container {
+    contain: layout style paint;
+}
+
+.section {
+    contain: layout style;
+}
+
+/* Optimize animations */
+@keyframes float-smooth {
+    0%, 100% { 
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 0deg); 
+    }
+    25% { 
+        transform: translate3d(0, -15px, 0) rotate3d(0, 0, 1, 90deg); 
+    }
+    50% { 
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 180deg); 
+    }
+    75% { 
+        transform: translate3d(0, 15px, 0) rotate3d(0, 0, 1, 270deg); 
+    }
+}
+
+/* Remove conflicting animations - handled in main CSS */
+
+@keyframes pulse-smooth {
+    0%, 100% { 
+        transform: scale3d(1, 1, 1); 
+        opacity: 0.4; 
+    }
+    50% { 
+        transform: scale3d(1.05, 1.05, 1); 
+        opacity: 0.5; 
+    }
+}
+
+/* Remove conflicting animations - handled in main CSS */
+
+@keyframes particle-float-smooth {
+    from {
+        transform: translate3d(0, 100vh, 0);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.3;
+    }
+    95% {
+        opacity: 0.3;
+    }
+    to {
+        transform: translate3d(30px, -100vh, 0);
+        opacity: 0;
+    }
+}
+
+/* Remove conflicting animations - handled in main CSS */
+
+/* Smoother hover effects */
+.btn:hover {
+    transform: translate3d(0, -2px, 0) scale3d(1.02, 1.02, 1);
+}
+
+.skill-card:hover {
+    transform: translate3d(0, -5px, 0) scale3d(1.02, 1.02, 1);
+}
+
+.contact-link:hover {
+    transform: translate3d(0, -2px, 0);
+}
+
+/* Optimize scroll progress bar */
+.scroll-progress {
+    will-change: width;
+    transition: none;
+}
+
+/* Optimize floating nav */
+.floating-nav {
+    transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: top;
+}
+
+/* Hero content optimizations */
+.hero-content {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduce complexity for mobile */
+@media (max-width: 768px) {
+    .particle {
+        display: none;
+    }
+    
+    .geo-shape:nth-child(n+4) {
+        display: none;
+    }
+}
+
+/* High performance mode for low-end devices */
+@media (prefers-reduced-motion: no-preference) {
+    body {
+        scroll-behavior: smooth;
+    }
+}
+
+/* Removed forced transforms to prevent conflicts */
+
+/* Optimize font rendering */
+body {
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reduce repaints on scroll */
+.section-title,
+.skill-card,
+.about-card,
+.experience-item {
+    will-change: auto;
+}
+
+/* Only apply will-change during animation */
+.section-title.visible,
+.skill-card:hover,
+.about-card:hover {
+    will-change: transform, opacity;
+}
+
+/* Reset will-change after animation */
+.section-title.visible {
+    animation: optimizedFadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes optimizedFadeIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        will-change: auto;
+    }
+}

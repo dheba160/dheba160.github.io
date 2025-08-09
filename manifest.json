@@ -1,0 +1,26 @@
+{
+  "name": "Dennis Heba - Full-Stack Developer Portfolio",
+  "short_name": "Dennis Heba",
+  "description": "Portfolio website showcasing innovative web solutions and creative digital experiences",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "developer", "portfolio"],
+  "lang": "en-US"
+}
