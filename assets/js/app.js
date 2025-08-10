@@ -16,13 +16,18 @@
     }
 
     function init() {
+        console.log('Initializing portfolio...');
+        console.log('Reduced motion preference:', prefersReducedMotion);
+        
         try {
             // Add loading indicator
             addLoadingIndicator();
             
+            // Always create the parallax background (particle network included)
+            createParallaxBackground();
+            
             // Initialize components with error handling
             if (!prefersReducedMotion) {
-                createParallaxBackground();
                 setupScrollEffects();
             }
             setupSmoothScrolling();
@@ -33,6 +38,7 @@
             
             // Remove loading indicator after initialization
             removeLoadingIndicator();
+            console.log('Portfolio initialization complete');
         } catch (error) {
             console.error('Error initializing portfolio:', error);
             removeLoadingIndicator();
@@ -59,11 +65,13 @@
 
     // Create parallax background with geometric shapes and particles
     function createParallaxBackground() {
+        console.log('Creating parallax background...');
         const container = document.querySelector('.parallax-container');
         if (!container) {
-            console.warn('Parallax container not found');
+            console.error('Parallax container not found!');
             return;
         }
+        console.log('Parallax container found:', container);
         
         try {
             // Create particle network canvas first (behind everything)
