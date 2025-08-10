@@ -153,6 +153,7 @@
         let mouseX = -1000;
         let mouseY = -1000;
         let scrollProgress = 0;
+        let isAnimating = true; // Track animation state
         
         // Resize canvas
         function resizeCanvas() {
@@ -176,21 +177,27 @@
                 this.baseY = Math.random() * canvas.height;
                 this.x = this.baseX;
                 this.y = this.baseY;
-                this.vx = (Math.random() - 0.5) * 0.8; // Increased movement speed
-                this.vy = (Math.random() - 0.5) * 0.8;
+                this.vx = (Math.random() - 0.5) * 0.3; // Slower, more graceful movement
+                this.vy = (Math.random() - 0.5) * 0.3;
                 this.size = Math.random() * 2 + 1;
                 this.opacity = Math.random() * 0.5 + 0.3;
             }
             
             update() {
                 // Always animate movement - no reduced motion check
-                // Slow drift movement
-                this.x += this.vx;
-                this.y += this.vy;
+                // Update base position with drift movement
+                this.baseX += this.vx;
+                this.baseY += this.vy;
                 
                 // Bounce off edges
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                if (this.baseX < 0 || this.baseX > canvas.width) {
+                    this.vx *= -1;
+                    this.baseX = Math.max(0, Math.min(canvas.width, this.baseX));
+                }
+                if (this.baseY < 0 || this.baseY > canvas.height) {
+                    this.vy *= -1;
+                    this.baseY = Math.max(0, Math.min(canvas.height, this.baseY));
+                }
                 
                 // Apply scroll-based zoom effect
                 const zoomFactor = 1 + scrollProgress * 3;
@@ -201,9 +208,9 @@
                 const dx = this.baseX - centerX;
                 const dy = this.baseY - centerY;
                 
-                // Always apply full animation
-                this.x = centerX + dx * zoomFactor + this.vx * 30;
-                this.y = centerY + dy * zoomFactor + this.vy * 30;
+                // Apply zoom to drifting base position
+                this.x = centerX + dx * zoomFactor;
+                this.y = centerY + dy * zoomFactor;
                 
                 // Keep particles visible but fade slightly on scroll
                 if (this.x < -100 || this.x > canvas.width + 100 || 
@@ -298,6 +305,8 @@
         
         // Animation loop
         function animate() {
+            if (!isAnimating) return;
+            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // Update and draw particles
@@ -357,6 +366,57 @@
                 cancelAnimationFrame(animationId);
             }
         });
+        
+        // Setup toggle switch functionality
+        const toggle = document.getElementById('particleToggle');
+        if (toggle) {
+            console.log('Setting up particle toggle...');
+            
+            // Set initial state
+            toggle.checked = true;
+            
+            toggle.addEventListener('change', (e) => {
+                isAnimating = e.target.checked;
+                console.log('Particle animation:', isAnimating ? 'ON' : 'OFF');
+                
+                if (isAnimating) {
+                    // Resume animation
+                    animate();
+                    canvas.style.opacity = '0.9';
+                } else {
+                    // Stop animation and fade out
+                    if (animationId) {
+                        cancelAnimationFrame(animationId);
+                        animationId = null;
+                    }
+                    canvas.style.opacity = '0';
+                }
+            });
+        }
+        
+        // Return control functions
+        return {
+            start: () => {
+                isAnimating = true;
+                animate();
+            },
+            stop: () => {
+                isAnimating = false;
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            },
+            toggle: (state) => {
+                isAnimating = state;
+                if (state) {
+                    animate();
+                } else if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            }
+        };
     }
 
     // Simplified scroll effects - removed animation frame for stability
@@ -554,15 +614,34 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    // For sections, ensure they're centered in viewport
+                    if (target.classList.contains('section')) {
+                        const targetPosition = target.offsetTop;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        // For hero section or others
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 }
             });
         });
+        
+        // Add smooth scrolling for mouse wheel/trackpad
+        let isScrolling = false;
+        const sections = document.querySelectorAll('.hero, .section');
+        
+        // Detect if user prefers smooth scrolling
+        document.documentElement.style.scrollBehavior = 'smooth';
     }
 
 
