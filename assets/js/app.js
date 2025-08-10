@@ -199,8 +199,8 @@
                     this.baseY = Math.max(0, Math.min(canvas.height, this.baseY));
                 }
                 
-                // Apply scroll-based zoom effect
-                const zoomFactor = 1 + scrollProgress * 3;
+                // Apply scroll-based zoom effect - reduced rate
+                const zoomFactor = 1 + scrollProgress * 2; // Reduced from 3 to 2
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
                 
@@ -342,8 +342,10 @@
         // Update scroll progress for zoom effect
         function updateScrollProgress() {
             const scrolled = window.pageYOffset;
-            const maxScroll = window.innerHeight;
-            scrollProgress = Math.min(1, scrolled / maxScroll);
+            const documentHeight = document.documentElement.scrollHeight;
+            const windowHeight = window.innerHeight;
+            // Calculate progress based on entire document height, not just first viewport
+            scrollProgress = Math.min(1, scrolled / (documentHeight - windowHeight));
             
             // Keep more particles visible longer
             const targetCount = Math.max(20, Math.floor((1 - scrollProgress * 0.7) * particles.length));
@@ -515,7 +517,7 @@
                 floatingNav.classList.remove('visible');
             }
             
-            // Update active state - improved detection for last section
+            // Update active state - improved detection
             const windowHeight = window.innerHeight;
             const docHeight = document.documentElement.scrollHeight;
             const scrollBottom = scrollY + windowHeight;
@@ -529,23 +531,30 @@
                     }
                 });
             } else {
-                // Normal section detection
-                let activeFound = false;
+                // Improved section detection - check which section's top is closest to viewport top
+                let closestSection = null;
+                let closestDistance = Infinity;
+                
                 sections.forEach(section => {
                     const rect = section.getBoundingClientRect();
-                    const id = section.getAttribute('id');
+                    const sectionTop = rect.top;
                     
-                    // Check if section is in viewport (more generous detection)
-                    if (!activeFound && rect.top <= windowHeight * 0.3 && rect.bottom >= 0) {
-                        activeFound = true;
-                        navLinks.forEach(link => {
-                            link.classList.remove('active');
-                            if (link.getAttribute('href') === `#${id}`) {
-                                link.classList.add('active');
-                            }
-                        });
+                    // Check if section top is at or above viewport center
+                    if (sectionTop <= windowHeight * 0.5 && Math.abs(sectionTop) < closestDistance) {
+                        closestDistance = Math.abs(sectionTop);
+                        closestSection = section;
                     }
                 });
+                
+                if (closestSection) {
+                    const id = closestSection.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
             }
             
             ticking = false;
@@ -559,6 +568,14 @@
         }
         
         window.addEventListener('scroll', requestTick, { passive: true });
+        
+        // Add a small delay after navigation clicks to update highlighting correctly
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', () => {
+                setTimeout(updateFloatingNav, 100);
+            });
+        });
+        
         updateFloatingNav();
     }
     

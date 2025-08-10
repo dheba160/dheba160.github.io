@@ -16,8 +16,8 @@
 }
 
 html {
-    scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth !important;
+    scroll-snap-type: y proximity; /* Changed from mandatory to proximity for smoother experience */
     overflow-y: scroll;
 }
 
@@ -30,6 +30,7 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth !important;
 }
 
 /* Focus States for Accessibility */
@@ -179,7 +180,7 @@ a:focus {
     text-align: center;
     padding: 2rem;
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal; /* Changed from always to normal for smoother scrolling */
 }
 
 .hero-content h1 {
@@ -254,7 +255,7 @@ a:focus {
     padding: 80px 0;
     position: relative;
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal; /* Changed from always to normal for smoother scrolling */
 }
 
 .section .container {
