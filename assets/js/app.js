@@ -628,37 +628,35 @@
 
     // Smooth scrolling for navigation links
     function setupSmoothScrolling() {
+        // Ensure smooth scrolling is always enabled
+        document.documentElement.style.scrollBehavior = 'smooth';
+        document.body.style.scrollBehavior = 'smooth';
+        
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                
                 const targetId = this.getAttribute('href');
                 const target = document.querySelector(targetId);
                 
                 if (target) {
-                    // For sections, ensure they're centered in viewport
-                    if (target.classList.contains('section')) {
-                        const targetPosition = target.offsetTop;
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                    } else {
-                        // For hero section or others
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
+                    // Calculate exact position
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+                    
+                    // Use smooth scroll with a slight easing
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update URL without jumping
+                    if (history.pushState) {
+                        history.pushState(null, null, targetId);
                     }
                 }
             });
         });
-        
-        // Add smooth scrolling for mouse wheel/trackpad
-        let isScrolling = false;
-        const sections = document.querySelectorAll('.hero, .section');
-        
-        // Detect if user prefers smooth scrolling
-        document.documentElement.style.scrollBehavior = 'smooth';
     }
 
 
