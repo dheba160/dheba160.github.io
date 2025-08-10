@@ -2,8 +2,8 @@
 (function() {
     'use strict';
 
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Ignore reduced motion for particle network - always animate
+    const prefersReducedMotion = false; // Disabled to ensure particle animation always runs
     
     // Loading state
     let isLoading = true;
@@ -16,8 +16,8 @@
     }
 
     function init() {
-        console.log('Initializing portfolio...');
-        console.log('Reduced motion preference:', prefersReducedMotion);
+            console.log('Initializing portfolio...');
+        console.log('Particle animation enabled with full motion');
         
         try {
             // Add loading indicator
@@ -27,9 +27,7 @@
             createParallaxBackground();
             
             // Initialize components with error handling
-            if (!prefersReducedMotion) {
-                setupScrollEffects();
-            }
+            setupScrollEffects(); // Always enable scroll effects now
             setupSmoothScrolling();
             setupSkillModals();
             setupIntersectionObservers();
@@ -178,25 +176,23 @@
                 this.baseY = Math.random() * canvas.height;
                 this.x = this.baseX;
                 this.y = this.baseY;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
+                this.vx = (Math.random() - 0.5) * 0.8; // Increased movement speed
+                this.vy = (Math.random() - 0.5) * 0.8;
                 this.size = Math.random() * 2 + 1;
                 this.opacity = Math.random() * 0.5 + 0.3;
             }
             
             update() {
-                // Only animate movement if reduced motion is not preferred
-                if (!prefersReducedMotion) {
-                    // Slow drift movement
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    
-                    // Bounce off edges
-                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-                }
+                // Always animate movement - no reduced motion check
+                // Slow drift movement
+                this.x += this.vx;
+                this.y += this.vy;
                 
-                // Apply scroll-based zoom effect (keep this even with reduced motion)
+                // Bounce off edges
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                
+                // Apply scroll-based zoom effect
                 const zoomFactor = 1 + scrollProgress * 3;
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
@@ -205,14 +201,9 @@
                 const dx = this.baseX - centerX;
                 const dy = this.baseY - centerY;
                 
-                if (!prefersReducedMotion) {
-                    this.x = centerX + dx * zoomFactor + this.vx * 30;
-                    this.y = centerY + dy * zoomFactor + this.vy * 30;
-                } else {
-                    // Static positioning for reduced motion
-                    this.x = centerX + dx * zoomFactor;
-                    this.y = centerY + dy * zoomFactor;
-                }
+                // Always apply full animation
+                this.x = centerX + dx * zoomFactor + this.vx * 30;
+                this.y = centerY + dy * zoomFactor + this.vy * 30;
                 
                 // Keep particles visible but fade slightly on scroll
                 if (this.x < -100 || this.x > canvas.width + 100 || 
@@ -220,8 +211,8 @@
                     this.opacity = 0;
                 } else {
                     // More gradual fade - keep minimum visibility
-                    const baseFade = Math.max(0.2, 1 - scrollProgress * 0.5);
-                    this.opacity = (0.3 + Math.random() * 0.3) * baseFade;
+                    const baseFade = Math.max(0.3, 1 - scrollProgress * 0.4);
+                    this.opacity = (0.4 + Math.random() * 0.3) * baseFade;
                 }
             }
             
@@ -237,9 +228,9 @@
         // Initialize particles
         function initParticles() {
             particles = [];
-            const baseCount = 80;
-            // Reduce particles on mobile
-            const count = window.innerWidth < 768 ? baseCount / 2 : baseCount;
+            const baseCount = 150; // Increased density
+            // Reduce particles on mobile but keep it dense
+            const count = window.innerWidth < 768 ? baseCount * 0.7 : baseCount;
             
             for (let i = 0; i < count; i++) {
                 particles.push(new Particle());
@@ -248,27 +239,36 @@
         }
         initParticles();
         
-        // Draw connections between particles
+        // Draw connections between particles - denser mesh
         function drawConnections() {
-            const maxDistance = 150 * Math.max(0.5, 1 - scrollProgress * 0.3);
+            const baseMaxDistance = 200; // Increased connection distance for denser mesh
+            const maxDistance = baseMaxDistance * Math.max(0.6, 1 - scrollProgress * 0.2);
             
             for (let i = 0; i < particles.length; i++) {
                 // Skip particles with very low opacity
-                if (particles[i].opacity < 0.1) continue;
+                if (particles[i].opacity < 0.05) continue;
+                
+                // Track connections for this particle to create constellation effect
+                let connections = 0;
+                const maxConnections = 8; // Each particle can connect to up to 8 others
                 
                 for (let j = i + 1; j < particles.length; j++) {
-                    if (particles[j].opacity < 0.1) continue;
+                    if (particles[j].opacity < 0.05 || connections >= maxConnections) continue;
                     
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
                     if (distance < maxDistance) {
-                        // Keep connections more visible
-                        const opacity = (1 - distance / maxDistance) * 0.3 * Math.max(0.3, 1 - scrollProgress * 0.5);
+                        connections++;
+                        // More visible connections with gradient based on distance
+                        const distanceFactor = 1 - (distance / maxDistance);
+                        const opacity = distanceFactor * 0.4 * Math.max(0.4, 1 - scrollProgress * 0.4);
+                        
+                        // Gradient color based on distance
                         ctx.globalAlpha = opacity;
-                        ctx.strokeStyle = '#667eea';
-                        ctx.lineWidth = 0.5;
+                        ctx.strokeStyle = distance < maxDistance * 0.5 ? '#667eea' : '#8b9fff';
+                        ctx.lineWidth = distance < maxDistance * 0.3 ? 0.8 : 0.5;
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -276,17 +276,17 @@
                     }
                 }
                 
-                // Connect to mouse position
+                // Connect to mouse position with stronger effect
                 if (mouseX > 0 && mouseY > 0) {
                     const dx = particles[i].x - mouseX;
                     const dy = particles[i].y - mouseY;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
-                    if (distance < 100) {
-                        const opacity = (1 - distance / 100) * 0.4 * Math.max(0.3, 1 - scrollProgress * 0.5);
+                    if (distance < 150) { // Increased mouse interaction range
+                        const opacity = (1 - distance / 150) * 0.6 * Math.max(0.4, 1 - scrollProgress * 0.3);
                         ctx.globalAlpha = opacity;
                         ctx.strokeStyle = '#f56565';
-                        ctx.lineWidth = 1;
+                        ctx.lineWidth = 1.5;
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(mouseX, mouseY);
@@ -361,7 +361,7 @@
 
     // Simplified scroll effects - removed animation frame for stability
     function setupScrollEffects() {
-        if (prefersReducedMotion) return;
+        // No longer checking for reduced motion - always enable
         
         // Cache DOM elements
         const layers = document.querySelectorAll('.parallax-layer');
