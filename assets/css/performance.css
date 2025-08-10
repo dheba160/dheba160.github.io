@@ -5,9 +5,11 @@
 .geo-shape,
 .gradient-orb,
 .particle {
-    will-change: transform;
+    will-change: transform, opacity;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 /* Optimize transition timing functions */
@@ -113,16 +115,46 @@
 
 /* Reduce complexity for mobile */
 @media (max-width: 768px) {
-    .particle {
-        display: none;
-    }
+    /* Particles handled in main CSS */
     
     .geo-shape:nth-child(n+4) {
         display: none;
     }
+    
+    /* Reduce animation complexity */
+    .parallax-layer {
+        animation: none !important;
+    }
 }
 
-/* High performance mode for low-end devices */
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    /* Disable all animations */
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    /* Disable parallax effects */
+    .parallax-layer,
+    .geo-shape,
+    .gradient-orb,
+    .particle {
+        animation: none !important;
+    }
+    
+    /* Keep essential functionality */
+    .skill-modal,
+    .floating-nav {
+        transition: opacity 0.01ms !important;
+    }
+}
+
+/* High performance mode for capable devices */
 @media (prefers-reduced-motion: no-preference) {
     body {
         scroll-behavior: smooth;

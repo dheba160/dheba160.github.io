@@ -2,23 +2,70 @@
 (function() {
     'use strict';
 
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // Loading state
+    let isLoading = true;
+
     // Initialize when DOM is ready
-    document.addEventListener('DOMContentLoaded', init);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 
     function init() {
-        createParallaxBackground();
-        setupScrollEffects();
-        setupSmoothScrolling();
-        setupSkillModals();
-        setupIntersectionObservers();
-        setupFloatingNav();
-        setupScrollProgress();
+        try {
+            // Add loading indicator
+            addLoadingIndicator();
+            
+            // Initialize components with error handling
+            if (!prefersReducedMotion) {
+                createParallaxBackground();
+                setupScrollEffects();
+            }
+            setupSmoothScrolling();
+            setupSkillModals();
+            setupIntersectionObservers();
+            setupFloatingNav();
+            setupScrollProgress();
+            
+            // Remove loading indicator after initialization
+            removeLoadingIndicator();
+        } catch (error) {
+            console.error('Error initializing portfolio:', error);
+            removeLoadingIndicator();
+        }
+    }
+    
+    // Loading indicator functions
+    function addLoadingIndicator() {
+        const loader = document.createElement('div');
+        loader.className = 'page-loader';
+        loader.setAttribute('aria-hidden', 'true');
+        loader.innerHTML = '<div class="loader-spinner"></div>';
+        document.body.appendChild(loader);
+    }
+    
+    function removeLoadingIndicator() {
+        isLoading = false;
+        const loader = document.querySelector('.page-loader');
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 300);
+        }
     }
 
     // Create parallax background with geometric shapes and particles
     function createParallaxBackground() {
         const container = document.querySelector('.parallax-container');
-        if (!container) return;
+        if (!container) {
+            console.warn('Parallax container not found');
+            return;
+        }
+        
+        try {
 
         // Create geometric shapes layer
         const geoLayer = document.createElement('div');
@@ -73,17 +120,29 @@
             particleLayer.appendChild(particle);
         }
         container.appendChild(particleLayer);
+        } catch (error) {
+            console.error('Error creating parallax background:', error);
+        }
     }
 
     // Simplified scroll effects - removed animation frame for stability
     function setupScrollEffects() {
+        if (prefersReducedMotion) return;
+        
         // Cache DOM elements
         const layers = document.querySelectorAll('.parallax-layer');
         const heroContent = document.querySelector('.hero-content');
         const geoShapes = document.querySelectorAll('.geo-shape');
         const orbs = document.querySelectorAll('.gradient-orb');
         
+        // Throttle scroll events
+        let ticking = false;
+        
         function updateScrollEffects() {
+            if (ticking) return;
+            ticking = true;
+            
+            requestAnimationFrame(() => {
             const scrolled = window.pageYOffset;
             
             // Simple parallax for layers
@@ -110,6 +169,9 @@
             orbs.forEach((orb, index) => {
                 const scale = 1 + Math.sin(scrolled * 0.001 + index) * 0.03;
                 orb.style.transform = `scale(${scale})`;
+            });
+            
+            ticking = false;
             });
         }
         
@@ -189,6 +251,15 @@
     
     // Enhanced intersection observers for scroll animations
     function setupIntersectionObservers() {
+        // Check if IntersectionObserver is supported
+        if (!('IntersectionObserver' in window)) {
+            // Fallback: show all elements immediately
+            document.querySelectorAll('.section-title, .about-card, .skill-card, .experience-item').forEach(el => {
+                el.classList.add('visible', 'animated');
+            });
+            return;
+        }
+        
         // Section animations
         const sectionObserver = new IntersectionObserver(
             (entries) => {
@@ -242,7 +313,7 @@
     }
 
 
-    // Setup skill modals
+    // Setup skill modals with improved accessibility
     function setupSkillModals() {
         const skillCards = document.querySelectorAll('.skill-card');
         const modal = document.getElementById('skillModal');
@@ -250,17 +321,53 @@
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');
         
-        if (!modal) return;
+        if (!modal || !modalTitle || !modalContent) {
+            console.warn('Modal elements not found');
+            return;
+        }
+        
+        let lastFocusedElement = null;
         
         skillCards.forEach(card => {
-            card.addEventListener('click', () => {
+            // Add keyboard support
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+            card.setAttribute('aria-label', `View details about ${card.querySelector('h3').textContent}`);
+            
+            const openModal = () => {
                 const skill = card.dataset.skill;
                 const content = getSkillContent(skill);
                 
-                modalTitle.textContent = content.title;
-                modalContent.innerHTML = content.body;
+                // Store last focused element for restoration
+                lastFocusedElement = document.activeElement;
+                
+                // Add loading state
+                modal.classList.add('loading');
+                modalTitle.textContent = 'Loading...';
+                modalContent.innerHTML = '<div class="modal-loader"></div>';
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
+                
+                // Simulate content loading (in real app, this might be an API call)
+                setTimeout(() => {
+                    modal.classList.remove('loading');
+                    modalTitle.textContent = content.title;
+                    modalContent.innerHTML = content.body;
+                    
+                    // Focus management for accessibility
+                    modalClose.focus();
+                    
+                    // Trap focus within modal
+                    trapFocus(modal);
+                }, 200);
+            };
+            
+            card.addEventListener('click', openModal);
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openModal();
+                }
             });
         });
         
@@ -275,7 +382,52 @@
         
         function closeModal() {
             modal.classList.remove('active');
+            modal.classList.remove('loading');
             document.body.style.overflow = '';
+            
+            // Restore focus to last focused element
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
+                lastFocusedElement = null;
+            }
+            
+            // Remove focus trap
+            removeFocusTrap();
+        }
+        
+        // Focus trap for modal accessibility
+        function trapFocus(element) {
+            const focusableElements = element.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstFocusable = focusableElements[0];
+            const lastFocusable = focusableElements[focusableElements.length - 1];
+            
+            function handleTabKey(e) {
+                if (e.key !== 'Tab') return;
+                
+                if (e.shiftKey) {
+                    if (document.activeElement === firstFocusable) {
+                        e.preventDefault();
+                        lastFocusable.focus();
+                    }
+                } else {
+                    if (document.activeElement === lastFocusable) {
+                        e.preventDefault();
+                        firstFocusable.focus();
+                    }
+                }
+            }
+            
+            element.addEventListener('keydown', handleTabKey);
+            element._handleTabKey = handleTabKey;
+        }
+        
+        function removeFocusTrap() {
+            if (modal._handleTabKey) {
+                modal.removeEventListener('keydown', modal._handleTabKey);
+                delete modal._handleTabKey;
+            }
         }
     }
     

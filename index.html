@@ -3,19 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dennis Heba | IT Professional</title>
-    <meta name="description" content="IT professional with technical support expertise and programming experience.">
-    <meta name="keywords" content="Dennis Heba, tech support, customer service, remote work, IT support">
+    <title>Dennis Heba | IT Professional - Technical Support & Software Development</title>
+    <meta name="description" content="Dennis Heba is an IT professional specializing in technical support, cross-platform systems administration, and software development. Google IT Support certified with expertise in Windows, macOS, Linux, Python, and JavaScript.">
+    <meta name="keywords" content="Dennis Heba, IT professional, technical support specialist, software developer, Windows support, macOS support, Linux administration, Python developer, JavaScript, remote IT support, Google IT Support Certificate">
     <meta name="author" content="Dennis Heba">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dheba160.github.io/">
-    <meta property="og:title" content="Dennis Heba | IT Professional">
-    <meta property="og:description" content="Technical support and IT solutions.">
+    <meta property="og:title" content="Dennis Heba | IT Professional - Technical Support & Software Development">
+    <meta property="og:description" content="IT professional specializing in technical support and software development. Google IT Support certified with expertise across Windows, macOS, and Linux platforms.">
+    <meta property="og:image" content="https://dheba160.github.io/assets/images/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dennis Heba | IT Professional">
+    <meta name="twitter:description" content="IT professional specializing in technical support and software development.">
+    <meta name="twitter:image" content="https://dheba160.github.io/assets/images/og-image.png">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://dheba160.github.io/">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,16 +41,43 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="/assets/css/performance.css">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Dennis Heba",
+        "jobTitle": "IT Professional",
+        "description": "Technical Support Specialist and Software Developer",
+        "url": "https://dheba160.github.io",
+        "sameAs": [
+            "https://github.com/dheba160"
+        ],
+        "knowsAbout": [
+            "Technical Support",
+            "Windows Administration",
+            "macOS Support",
+            "Linux Systems",
+            "Python Programming",
+            "JavaScript Development",
+            "Customer Service",
+            "Remote IT Support"
+        ],
+        "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "Google Career Certificates"
+        }
+    }
+    </script>
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main" class="skip-link">Skip to main content</a>
     
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" aria-hidden="true"></div>
     
     <!-- Floating Navigation -->
-    <nav class="floating-nav" aria-label="Quick navigation">
+    <nav class="floating-nav" role="navigation" aria-label="Quick navigation">
         <a href="#about">About</a>
         <a href="#experience">Experience</a>
         <a href="#skills">Skills</a>
@@ -45,7 +88,7 @@
     <div class="parallax-container" aria-hidden="true"></div>
     
     <!-- Hero Section -->
-    <section id="main" class="hero">
+    <section id="main" class="hero" role="banner">
         <div class="container">
             <div class="hero-content">
                 <h1>Dennis Heba</h1>
@@ -65,7 +108,7 @@
         <div class="container">
             <h2 class="section-title">About</h2>
             <div class="about-content">
-                <p style="text-align: center; font-size: 1.1rem; margin-bottom: 3rem; color: rgba(255,255,255,0.9); max-width: 700px; margin-left: auto; margin-right: auto;">
+                <p class="about-intro">
                     IT professional with comprehensive technical support experience and software development skills. 
                     Proven track record of delivering effective solutions across multiple platforms and technologies.
                 </p>
@@ -177,15 +220,15 @@
         <div class="container">
             <h2 class="section-title">Contact</h2>
             <div class="contact-content">
-                <p style="margin-bottom: 2rem;">
+                <p class="contact-intro">
                     Let's discuss how I can contribute to your team.
                 </p>
                 <div class="contact-links">
-                    <a href="mailto:dheba.contact@gmail.com" class="contact-link">
-                        <span>📧</span> Email
+                    <a href="mailto:dheba.contact@gmail.com" class="contact-link" aria-label="Send email to Dennis Heba">
+                        <span aria-hidden="true">📧</span> Email
                     </a>
-                    <a href="https://github.com/dheba160" target="_blank" rel="noopener" class="contact-link">
-                        <span>💻</span> GitHub
+                    <a href="https://github.com/dheba160" target="_blank" rel="noopener noreferrer" class="contact-link" aria-label="View Dennis Heba's GitHub profile">
+                        <span aria-hidden="true">💻</span> GitHub
                     </a>
                 </div>
             </div>
@@ -200,15 +243,26 @@
     </footer>
     
     <!-- Skill Modal -->
-    <div id="skillModal" class="skill-modal">
+    <div id="skillModal" class="skill-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="skill-modal-content">
-            <button class="skill-modal-close">&times;</button>
-            <h2 id="modalTitle" style="color: #667eea; margin-bottom: 1rem;"></h2>
+            <button class="skill-modal-close" aria-label="Close modal">&times;</button>
+            <h2 id="modalTitle" class="modal-title"></h2>
             <div id="modalContent"></div>
         </div>
     </div>
     
     <!-- JavaScript -->
-    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/app.js" defer></script>
+    
+    <!-- No JavaScript Fallback -->
+    <noscript>
+        <style>
+            .parallax-container { display: none; }
+            .skill-card { cursor: default; }
+            .skill-card .expand-hint { display: none; }
+            .floating-nav { display: none; }
+            .scroll-progress { display: none; }
+        </style>
+    </noscript>
 </body>
 </html>
