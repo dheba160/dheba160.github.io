@@ -214,12 +214,14 @@
                     this.y = centerY + dy * zoomFactor;
                 }
                 
-                // Fade out particles as they move off screen
+                // Keep particles visible but fade slightly on scroll
                 if (this.x < -100 || this.x > canvas.width + 100 || 
                     this.y < -100 || this.y > canvas.height + 100) {
                     this.opacity = 0;
                 } else {
-                    this.opacity = (0.3 + Math.random() * 0.3) * (1 - scrollProgress * 0.8);
+                    // More gradual fade - keep minimum visibility
+                    const baseFade = Math.max(0.2, 1 - scrollProgress * 0.5);
+                    this.opacity = (0.3 + Math.random() * 0.3) * baseFade;
                 }
             }
             
@@ -248,16 +250,22 @@
         
         // Draw connections between particles
         function drawConnections() {
-            const maxDistance = 150 * (1 - scrollProgress * 0.5);
+            const maxDistance = 150 * Math.max(0.5, 1 - scrollProgress * 0.3);
             
             for (let i = 0; i < particles.length; i++) {
+                // Skip particles with very low opacity
+                if (particles[i].opacity < 0.1) continue;
+                
                 for (let j = i + 1; j < particles.length; j++) {
+                    if (particles[j].opacity < 0.1) continue;
+                    
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
                     if (distance < maxDistance) {
-                        const opacity = (1 - distance / maxDistance) * 0.2 * (1 - scrollProgress * 0.7);
+                        // Keep connections more visible
+                        const opacity = (1 - distance / maxDistance) * 0.3 * Math.max(0.3, 1 - scrollProgress * 0.5);
                         ctx.globalAlpha = opacity;
                         ctx.strokeStyle = '#667eea';
                         ctx.lineWidth = 0.5;
@@ -275,7 +283,7 @@
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
                     if (distance < 100) {
-                        const opacity = (1 - distance / 100) * 0.3 * (1 - scrollProgress * 0.7);
+                        const opacity = (1 - distance / 100) * 0.4 * Math.max(0.3, 1 - scrollProgress * 0.5);
                         ctx.globalAlpha = opacity;
                         ctx.strokeStyle = '#f56565';
                         ctx.lineWidth = 1;
@@ -328,12 +336,13 @@
             const maxScroll = window.innerHeight;
             scrollProgress = Math.min(1, scrolled / maxScroll);
             
-            // Reduce particle count as scroll increases
-            const targetCount = Math.max(10, Math.floor((1 - scrollProgress) * particles.length));
+            // Keep more particles visible longer
+            const targetCount = Math.max(20, Math.floor((1 - scrollProgress * 0.7) * particles.length));
             if (particles.length > targetCount) {
                 particles.forEach((particle, index) => {
                     if (index >= targetCount) {
-                        particle.opacity = 0;
+                        // Gradual fade instead of instant hide
+                        particle.opacity *= 0.95;
                     }
                 });
             }
@@ -446,19 +455,38 @@
                 floatingNav.classList.remove('visible');
             }
             
-            // Update active state
-            sections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                if (rect.top <= 100 && rect.bottom >= 100) {
+            // Update active state - improved detection for last section
+            const windowHeight = window.innerHeight;
+            const docHeight = document.documentElement.scrollHeight;
+            const scrollBottom = scrollY + windowHeight;
+            
+            // Check if we're at the bottom of the page (for Contact section)
+            if (scrollBottom >= docHeight - 50) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#contact') {
+                        link.classList.add('active');
+                    }
+                });
+            } else {
+                // Normal section detection
+                let activeFound = false;
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
                     const id = section.getAttribute('id');
-                    navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${id}`) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
-            });
+                    
+                    // Check if section is in viewport (more generous detection)
+                    if (!activeFound && rect.top <= windowHeight * 0.3 && rect.bottom >= 0) {
+                        activeFound = true;
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
             
             ticking = false;
         }
