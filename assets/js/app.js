@@ -185,15 +185,18 @@
             }
             
             update() {
-                // Slow drift movement
-                this.x += this.vx;
-                this.y += this.vy;
+                // Only animate movement if reduced motion is not preferred
+                if (!prefersReducedMotion) {
+                    // Slow drift movement
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    // Bounce off edges
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
                 
-                // Bounce off edges
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-                
-                // Apply scroll-based zoom effect
+                // Apply scroll-based zoom effect (keep this even with reduced motion)
                 const zoomFactor = 1 + scrollProgress * 3;
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
@@ -201,8 +204,15 @@
                 // Move particles away from center as scroll increases
                 const dx = this.baseX - centerX;
                 const dy = this.baseY - centerY;
-                this.x = centerX + dx * zoomFactor + this.vx * 30;
-                this.y = centerY + dy * zoomFactor + this.vy * 30;
+                
+                if (!prefersReducedMotion) {
+                    this.x = centerX + dx * zoomFactor + this.vx * 30;
+                    this.y = centerY + dy * zoomFactor + this.vy * 30;
+                } else {
+                    // Static positioning for reduced motion
+                    this.x = centerX + dx * zoomFactor;
+                    this.y = centerY + dy * zoomFactor;
+                }
                 
                 // Fade out particles as they move off screen
                 if (this.x < -100 || this.x > canvas.width + 100 || 
@@ -294,13 +304,9 @@
             animationId = requestAnimationFrame(animate);
         }
         
-        // Start animation
-        if (!prefersReducedMotion) {
-            console.log('Starting particle animation...');
-            animate();
-        } else {
-            console.log('Particle animation disabled due to reduced motion preference');
-        }
+        // Start animation (always run, but respect reduced motion)
+        console.log('Starting particle animation...');
+        animate();
         
         // Track mouse movement (only in hero section)
         document.addEventListener('mousemove', (e) => {
