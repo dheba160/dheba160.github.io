@@ -66,6 +66,8 @@
         }
         
         try {
+            // Create particle network canvas first (behind everything)
+            createParticleNetwork(container);
 
         // Create geometric shapes layer
         const geoLayer = document.createElement('div');
@@ -123,6 +125,215 @@
         } catch (error) {
             console.error('Error creating parallax background:', error);
         }
+    }
+    
+    // Create interactive particle network
+    function createParticleNetwork(container) {
+        console.log('Creating particle network...');
+        const canvas = document.createElement('canvas');
+        canvas.className = 'particle-network';
+        canvas.style.position = 'absolute';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.pointerEvents = 'none';
+        container.appendChild(canvas);
+        console.log('Canvas added to container');
+        
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+        let mouseX = -1000;
+        let mouseY = -1000;
+        let scrollProgress = 0;
+        
+        // Resize canvas
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Particle class
+        class Particle {
+            constructor() {
+                this.reset();
+                // Random initial position
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+            }
+            
+            reset() {
+                this.baseX = Math.random() * canvas.width;
+                this.baseY = Math.random() * canvas.height;
+                this.x = this.baseX;
+                this.y = this.baseY;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+            
+            update() {
+                // Slow drift movement
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Bounce off edges
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                
+                // Apply scroll-based zoom effect
+                const zoomFactor = 1 + scrollProgress * 3;
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                
+                // Move particles away from center as scroll increases
+                const dx = this.baseX - centerX;
+                const dy = this.baseY - centerY;
+                this.x = centerX + dx * zoomFactor + this.vx * 30;
+                this.y = centerY + dy * zoomFactor + this.vy * 30;
+                
+                // Fade out particles as they move off screen
+                if (this.x < -100 || this.x > canvas.width + 100 || 
+                    this.y < -100 || this.y > canvas.height + 100) {
+                    this.opacity = 0;
+                } else {
+                    this.opacity = (0.3 + Math.random() * 0.3) * (1 - scrollProgress * 0.8);
+                }
+            }
+            
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#667eea';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        // Initialize particles
+        function initParticles() {
+            particles = [];
+            const baseCount = 80;
+            // Reduce particles on mobile
+            const count = window.innerWidth < 768 ? baseCount / 2 : baseCount;
+            
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+            console.log(`Initialized ${count} particles`);
+        }
+        initParticles();
+        
+        // Draw connections between particles
+        function drawConnections() {
+            const maxDistance = 150 * (1 - scrollProgress * 0.5);
+            
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.2 * (1 - scrollProgress * 0.7);
+                        ctx.globalAlpha = opacity;
+                        ctx.strokeStyle = '#667eea';
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+                
+                // Connect to mouse position
+                if (mouseX > 0 && mouseY > 0) {
+                    const dx = particles[i].x - mouseX;
+                    const dy = particles[i].y - mouseY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        const opacity = (1 - distance / 100) * 0.3 * (1 - scrollProgress * 0.7);
+                        ctx.globalAlpha = opacity;
+                        ctx.strokeStyle = '#f56565';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouseX, mouseY);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Update and draw particles
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            // Draw connections
+            drawConnections();
+            
+            animationId = requestAnimationFrame(animate);
+        }
+        
+        // Start animation
+        if (!prefersReducedMotion) {
+            console.log('Starting particle animation...');
+            animate();
+        } else {
+            console.log('Particle animation disabled due to reduced motion preference');
+        }
+        
+        // Track mouse movement (only in hero section)
+        document.addEventListener('mousemove', (e) => {
+            const heroSection = document.querySelector('.hero');
+            const rect = heroSection.getBoundingClientRect();
+            
+            if (e.clientY < rect.bottom) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            } else {
+                mouseX = -1000;
+                mouseY = -1000;
+            }
+        });
+        
+        // Update scroll progress for zoom effect
+        function updateScrollProgress() {
+            const scrolled = window.pageYOffset;
+            const maxScroll = window.innerHeight;
+            scrollProgress = Math.min(1, scrolled / maxScroll);
+            
+            // Reduce particle count as scroll increases
+            const targetCount = Math.max(10, Math.floor((1 - scrollProgress) * particles.length));
+            if (particles.length > targetCount) {
+                particles.forEach((particle, index) => {
+                    if (index >= targetCount) {
+                        particle.opacity = 0;
+                    }
+                });
+            }
+        }
+        
+        window.addEventListener('scroll', updateScrollProgress, { passive: true });
+        updateScrollProgress();
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        });
     }
 
     // Simplified scroll effects - removed animation frame for stability
