@@ -628,9 +628,19 @@
 
     // Smooth scrolling for navigation links
     function setupSmoothScrolling() {
-        // Ensure smooth scrolling is always enabled
-        document.documentElement.style.scrollBehavior = 'smooth';
-        document.body.style.scrollBehavior = 'smooth';
+        // Force smooth scrolling globally
+        document.documentElement.style.setProperty('scroll-behavior', 'smooth', 'important');
+        document.body.style.setProperty('scroll-behavior', 'smooth', 'important');
+        
+        // Override any CSS scroll-snap that might interfere
+        document.documentElement.style.setProperty('scroll-snap-type', 'none', 'important');
+        document.body.style.setProperty('scroll-snap-type', 'none', 'important');
+        
+        // Remove scroll snap from all sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.setProperty('scroll-snap-align', 'none', 'important');
+            section.style.setProperty('scroll-snap-stop', 'normal', 'important');
+        });
         
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -641,19 +651,39 @@
                 const target = document.querySelector(targetId);
                 
                 if (target) {
-                    // Calculate exact position
-                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+                    // Calculate position with a small offset for better visual alignment
+                    const offset = 20; // Small offset from top
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
                     
-                    // Use smooth scroll with a slight easing
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
+                    // Create a smooth custom scroll animation
+                    const startPosition = window.pageYOffset;
+                    const distance = targetPosition - startPosition;
+                    const duration = 800; // Duration in ms
+                    let start = null;
                     
-                    // Update URL without jumping
-                    if (history.pushState) {
-                        history.pushState(null, null, targetId);
+                    function smoothScroll(timestamp) {
+                        if (!start) start = timestamp;
+                        const progress = timestamp - start;
+                        const percentage = Math.min(progress / duration, 1);
+                        
+                        // Easing function for smoother animation
+                        const easeInOutCubic = percentage < 0.5
+                            ? 4 * percentage * percentage * percentage
+                            : 1 - Math.pow(-2 * percentage + 2, 3) / 2;
+                        
+                        window.scrollTo(0, startPosition + distance * easeInOutCubic);
+                        
+                        if (progress < duration) {
+                            requestAnimationFrame(smoothScroll);
+                        } else {
+                            // Update URL after animation completes
+                            if (history.pushState) {
+                                history.pushState(null, null, targetId);
+                            }
+                        }
                     }
+                    
+                    requestAnimationFrame(smoothScroll);
                 }
             });
         });
