@@ -658,7 +658,14 @@
                     // Create a smooth custom scroll animation
                     const startPosition = window.pageYOffset;
                     const distance = targetPosition - startPosition;
-                    const duration = 800; // Duration in ms
+                    const absDistance = Math.abs(distance);
+                    
+                    // Calculate duration based on distance
+                    // Minimum 400ms for short distances, maximum 1500ms for long distances
+                    // Base speed: ~1000 pixels per second
+                    const baseDuration = absDistance / 1.5; // pixels / (pixels per ms)
+                    const duration = Math.min(1500, Math.max(400, baseDuration));
+                    
                     let start = null;
                     
                     function smoothScroll(timestamp) {
